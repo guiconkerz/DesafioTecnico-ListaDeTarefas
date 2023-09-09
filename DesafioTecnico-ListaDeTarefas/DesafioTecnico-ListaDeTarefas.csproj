@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>DesafioTecnico_ListaDeTarefas</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ListaDeTarefas.Application\ListaDeTarefas.Application.csproj" />
+    <ProjectReference Include="..\ListaDeTarefas.Domain\ListaDeTarefas.Domain.csproj" />
+    <ProjectReference Include="..\ListaDeTarefas.Infra\ListaDeTarefas.Infra.csproj" />
+    <ProjectReference Include="..\ListaDeTarefas.Shared\ListaDeTarefas.Shared.csproj" />
+  </ItemGroup>
+
+</Project>
