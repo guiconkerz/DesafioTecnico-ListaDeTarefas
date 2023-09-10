@@ -1,4 +1,5 @@
 ﻿using Flunt.Notifications;
+using ListaDeTarefas.Domain.Abstraction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +9,14 @@ using System.Threading.Tasks;
 
 namespace ListaDeTarefas.Application.Usuarios.Commands.Excluir.Response
 {
-    public sealed class ExcluirUsuarioResponse
+    public sealed class ExcluirUsuarioResponse : IResponse
     {
+        public ExcluirUsuarioResponse(HttpStatusCode statusCode, string mensagem, IReadOnlyCollection<Notification> notifications)
+        {
+            StatusCode = statusCode;
+            Mensagem = mensagem;
+            Notifications = notifications;
+        }
         public ExcluirUsuarioResponse(IReadOnlyCollection<Notification> notifications)
         {
             Notifications = notifications;

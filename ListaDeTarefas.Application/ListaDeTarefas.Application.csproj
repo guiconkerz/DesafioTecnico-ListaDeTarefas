@@ -14,8 +14,4 @@
     <ProjectReference Include="..\ListaDeTarefas.Domain\ListaDeTarefas.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Usuarios\Commands\Excluir\Handler\" />
-  </ItemGroup>
-
 </Project>

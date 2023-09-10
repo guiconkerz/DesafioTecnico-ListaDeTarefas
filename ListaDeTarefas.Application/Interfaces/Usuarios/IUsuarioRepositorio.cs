@@ -10,6 +10,7 @@ namespace ListaDeTarefas.Application.Interfaces.Usuarios
     public interface IUsuarioRepositorio
     {
         Task Adicionar(Usuario usuario);
+        Task<bool> Remover(int id);
         Task<Usuario> BuscarPorId(int id);
     }
 }

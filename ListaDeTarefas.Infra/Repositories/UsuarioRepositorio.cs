@@ -2,11 +2,8 @@
 using ListaDeTarefas.Application.Interfaces.Usuarios;
 using ListaDeTarefas.Domain.Models;
 using ListaDeTarefas.Infra.Data.Context;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography.X509Certificates;
 
 namespace ListaDeTarefas.Infra.Repositories
 {
@@ -33,16 +30,20 @@ namespace ListaDeTarefas.Infra.Repositories
             }
         }
 
-        public async Task<Usuario> BuscarPorId(int id)
+        public async Task<Usuario> BuscarPorId(int id) => await _repositorioBase.ObterPorId(x => x.UsuarioId == id);
+
+        public async Task<bool> Remover(int id)
         {
-            try
+            var removido = await _tarefasContext
+                .Usuarios
+                .Where(x => x.UsuarioId == id)
+                .ExecuteDeleteAsync();
+
+            if (removido == 0)
             {
-                return await _repositorioBase.ObterPorId(x => x.UsuarioId == id);
+                return false;
             }
-            catch (Exception ex)
-            {
-                throw new Exception($"{ex.Message}");
-            }    
+            return true;
         }
     }
 }

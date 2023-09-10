@@ -2,6 +2,7 @@
 using ListaDeTarefas.Application.Interfaces.Usuarios;
 using ListaDeTarefas.Application.Usuarios.Commands.Criar.Request;
 using ListaDeTarefas.Application.Usuarios.Commands.Criar.Response;
+using ListaDeTarefas.Domain.Abstraction;
 using ListaDeTarefas.Domain.Models;
 using ListaDeTarefas.Domain.ValueObjects;
 using System.Net;
@@ -19,15 +20,14 @@ namespace ListaDeTarefas.Application.Usuarios.Commands.Criar.Handler
             _usuarioRepositorio = usuarioRepositorio;
         }
 
-        public async Task<CriarUsuarioResponse> Handle(CriarUsuarioRequest request)
+        public async Task<IResponse> Handle(CriarUsuarioRequest request)
         {
             request.Validar();
             if (!request.IsValid)
             {
-                return new CriarUsuarioResponse(request.Notifications)
-                {
-                    StatusCode = HttpStatusCode.BadRequest
-                };
+                return new CriarUsuarioResponse(statusCode: HttpStatusCode.BadRequest,
+                                            mensagem: "Falha na requisição para criar um usuário.",
+                                            notifications: request.Notifications);
             }
 
             var usuario = new Usuario(
@@ -41,11 +41,9 @@ namespace ListaDeTarefas.Application.Usuarios.Commands.Criar.Handler
                 await _usuarioRepositorio.Adicionar(usuario);
                 _unitOfWork.Commit();
 
-                return new CriarUsuarioResponse(request.Notifications)
-                {
-                    Mensagem = $"Usuario {usuario.Login} criado com sucesso!",
-                    StatusCode = HttpStatusCode.OK
-                };
+                return new CriarUsuarioResponse(statusCode: HttpStatusCode.OK,
+                                            mensagem: $"Usuario {request.Login} criado com sucesso!.",
+                                            notifications: request.Notifications);
             }
             catch (Exception ex)
             {

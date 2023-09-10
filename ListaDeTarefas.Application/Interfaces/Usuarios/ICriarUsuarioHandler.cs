@@ -1,10 +1,10 @@
 ﻿using ListaDeTarefas.Application.Usuarios.Commands.Criar.Request;
-using ListaDeTarefas.Application.Usuarios.Commands.Criar.Response;
+using ListaDeTarefas.Domain.Abstraction;
 
 namespace ListaDeTarefas.Application.Interfaces.Usuarios
 {
     public interface ICriarUsuarioHandler
     {
-        Task<CriarUsuarioResponse> Handle(CriarUsuarioRequest request);
+        Task<IResponse> Handle(CriarUsuarioRequest request);
     }
 }

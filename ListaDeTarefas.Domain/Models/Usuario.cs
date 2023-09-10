@@ -7,6 +7,7 @@ namespace ListaDeTarefas.Domain.Models
     {
         protected Usuario() { }
         public Usuario(Login login, Senha senha, Email email) => (Login, Senha, Email) = (login, senha, email);
+        public Usuario(int id) => UsuarioId = id;
 
         public int UsuarioId { get; private set; }
         public Login Login { get; private set; }
