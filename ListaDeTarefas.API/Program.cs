@@ -2,6 +2,7 @@ using ListaDeTarefas.Application.Interfaces.RepositoryBase;
 using ListaDeTarefas.Application.Interfaces.UnitOfWork;
 using ListaDeTarefas.Application.Interfaces.Usuarios;
 using ListaDeTarefas.Application.Usuarios.Commands.Criar.Handler;
+using ListaDeTarefas.Application.Usuarios.Commands.Excluir.Handler;
 using ListaDeTarefas.Infra.Data.Context;
 using ListaDeTarefas.Infra.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -45,4 +46,5 @@ static void AddRepositories(WebApplicationBuilder builder)
     builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
     builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
     builder.Services.AddScoped<ICriarUsuarioHandler, CriarUsuarioHandler>();
+    builder.Services.AddScoped<IExcluirUsuarioHandler, ExcluirUsuarioHandler>();
 }

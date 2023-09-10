@@ -1,18 +1,9 @@
-﻿using Flunt.Notifications;
-using ListaDeTarefas.Application.Interfaces.UnitOfWork;
+﻿using ListaDeTarefas.Application.Interfaces.UnitOfWork;
 using ListaDeTarefas.Application.Interfaces.Usuarios;
-using ListaDeTarefas.Application.Usuarios.Commands.Criar.Response;
 using ListaDeTarefas.Application.Usuarios.Commands.Excluir.Request;
 using ListaDeTarefas.Application.Usuarios.Commands.Excluir.Response;
 using ListaDeTarefas.Domain.Abstraction;
-using ListaDeTarefas.Domain.Models;
-using ListaDeTarefas.Domain.ValueObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ListaDeTarefas.Application.Usuarios.Commands.Excluir.Handler
 {
@@ -23,8 +14,6 @@ namespace ListaDeTarefas.Application.Usuarios.Commands.Excluir.Handler
             _unitOfWork = unitOfWork;
             _usuarioRepositorio = usuarioRepositorio;
         }
-
-        public HttpStatusCode StatusCode { get; set; }
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUsuarioRepositorio _usuarioRepositorio;
 
@@ -41,7 +30,7 @@ namespace ListaDeTarefas.Application.Usuarios.Commands.Excluir.Handler
             try
             {
                 _unitOfWork.BeginTransaction();
-                var removido = await _usuarioRepositorio.Remover(request.Id);
+                var removido = await _usuarioRepositorio.RemoverAsync(request.Id);
                 if (removido == false)
                 {
                     return new ExcluirUsuarioResponse(statusCode: HttpStatusCode.BadRequest,
@@ -61,7 +50,7 @@ namespace ListaDeTarefas.Application.Usuarios.Commands.Excluir.Handler
             }
             finally
             {
-                _unitOfWork.Rollback();
+                _unitOfWork.Dispose();
             }
         }
     }

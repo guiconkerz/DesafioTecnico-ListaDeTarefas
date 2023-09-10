@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ListaDeTarefas.Application.Interfaces.Usuarios
+namespace ListaDeTarefas.Application.Interfaces.Tarefas
 {
-    public interface IUsuarioRepositorio
+    public interface ITarefasRepositorio
     {
-        Task AdicionarAsync(Usuario usuario);
+        Task AdicionarAsync(Tarefa tarefa);
+        Task<bool> AtualizarAsync(Tarefa tarefa);
         Task<bool> RemoverAsync(int id);
-        Task<Usuario> BuscarPorIdAsync(int id);
     }
 }

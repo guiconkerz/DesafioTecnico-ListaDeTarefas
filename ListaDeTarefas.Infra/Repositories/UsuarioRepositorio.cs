@@ -18,7 +18,7 @@ namespace ListaDeTarefas.Infra.Repositories
             _repositorioBase = repositorioBase;
         }
 
-        public async Task Adicionar(Usuario usuario)
+        public async Task AdicionarAsync(Usuario usuario)
         {
             try
             {
@@ -30,9 +30,9 @@ namespace ListaDeTarefas.Infra.Repositories
             }
         }
 
-        public async Task<Usuario> BuscarPorId(int id) => await _repositorioBase.ObterPorId(x => x.UsuarioId == id);
+        public async Task<Usuario> BuscarPorIdAsync(int id) => await _repositorioBase.ObterPorId(x => x.UsuarioId == id);
 
-        public async Task<bool> Remover(int id)
+        public async Task<bool> RemoverAsync(int id)
         {
             var removido = await _tarefasContext
                 .Usuarios

@@ -21,11 +21,6 @@ namespace ListaDeTarefas.API.Controllers
             [FromBody] CriarUsuarioRequest request)
         {
             var response = await _handler.Handle(request);
-            if (true)
-            {
-
-            }
-            
             return response;
         }
 
@@ -33,8 +28,9 @@ namespace ListaDeTarefas.API.Controllers
         [Route("/{id}")]
         public async Task<IResponse> Delete(
             [FromServices] IExcluirUsuarioHandler _handler,
-            [FromRoute] ExcluirUsuarioRequest request)
+            [FromRoute] int id)
         {
+            var request = new ExcluirUsuarioRequest(id);
             var response = await _handler.Handle(request);
             return response;
         }

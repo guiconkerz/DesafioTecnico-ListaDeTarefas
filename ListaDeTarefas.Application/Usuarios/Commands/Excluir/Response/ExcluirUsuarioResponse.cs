@@ -1,11 +1,6 @@
 ﻿using Flunt.Notifications;
 using ListaDeTarefas.Domain.Abstraction;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ListaDeTarefas.Application.Usuarios.Commands.Excluir.Response
 {
@@ -16,17 +11,13 @@ namespace ListaDeTarefas.Application.Usuarios.Commands.Excluir.Response
             StatusCode = statusCode;
             Mensagem = mensagem;
             Notifications = notifications;
-        }
-        public ExcluirUsuarioResponse(IReadOnlyCollection<Notification> notifications)
-        {
-            Notifications = notifications;
-            DataExclusao = DateTime.UtcNow;
-            //OBS: Falta criar ExcluirUsuarioResponseHandler
+            _dataExclusao = DateTime.Now;
         }
 
-        public HttpStatusCode StatusCode { get; set; }
+        public HttpStatusCode StatusCode { get; private set; }
         public IReadOnlyCollection<Notification> Notifications { get; private set; } = new List<Notification>();
-        public string Mensagem { get; set; }
-        public DateTime DataExclusao { get; private set; }
+        public string Mensagem { get; private set; }
+        public string DataExclusao { get => _dataExclusao.ToString("dd/MM/yyyy HH:mm:ss"); }
+        private readonly DateTime _dataExclusao;
     }
 }

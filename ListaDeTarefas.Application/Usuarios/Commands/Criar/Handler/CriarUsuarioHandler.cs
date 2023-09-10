@@ -31,14 +31,14 @@ namespace ListaDeTarefas.Application.Usuarios.Commands.Criar.Handler
             }
 
             var usuario = new Usuario(
-                login: new Login(username: "admin"),
-                senha: new Senha(senha: "@Admin123"),
-                email: new Email("email@email.com"));
+                login: new Login(username: request.Login),
+                senha: new Senha(senha: request.Senha),
+                email: new Email(request.Email));
 
             try
             {
                 _unitOfWork.BeginTransaction();
-                await _usuarioRepositorio.Adicionar(usuario);
+                await _usuarioRepositorio.AdicionarAsync(usuario);
                 _unitOfWork.Commit();
 
                 return new CriarUsuarioResponse(statusCode: HttpStatusCode.OK,
