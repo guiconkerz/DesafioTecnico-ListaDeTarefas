@@ -1,9 +1,4 @@
 ﻿using ListaDeTarefas.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ListaDeTarefas.Application.Interfaces.Usuarios
 {
@@ -11,6 +6,9 @@ namespace ListaDeTarefas.Application.Interfaces.Usuarios
     {
         Task AdicionarAsync(Usuario usuario);
         Task<bool> RemoverAsync(int id);
+        Task<bool> AlterarSenha(Usuario usuario);   
+        Task<bool> AlterarEmail(Usuario usuario);
         Task<Usuario> BuscarPorIdAsync(int id);
+        Task<IEnumerable<Usuario>> ListarTodos();
     }
 }

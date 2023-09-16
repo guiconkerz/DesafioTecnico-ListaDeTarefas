@@ -9,8 +9,15 @@ namespace ListaDeTarefas.Infra.Data.Mappings
         public void Configure(EntityTypeBuilder<Tarefa> builder)
         {
             builder.ToTable("Tarefa");
+
             builder.Ignore(x => x.Id);
+
             builder.HasKey(x => x.TarefaId);
+
+            builder.Property(x => x.TarefaId)
+                .HasColumnName("TarefaId")
+                .HasColumnType("int")
+                .UseIdentityColumn();
 
             builder.Property(x => x.Titulo)
                 .HasColumnName("Titulo")
@@ -37,7 +44,8 @@ namespace ListaDeTarefas.Infra.Data.Mappings
             builder.HasOne(x => x.Usuario)
                 .WithMany(u => u.Tarefas)
                 .HasForeignKey(x => x.FkUsuario)
-                .IsRequired();
+                .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }

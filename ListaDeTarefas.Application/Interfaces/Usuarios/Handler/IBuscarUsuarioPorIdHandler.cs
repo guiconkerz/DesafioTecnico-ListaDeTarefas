@@ -1,4 +1,4 @@
-﻿namespace ListaDeTarefas.Application.Interfaces.Usuarios
+﻿namespace ListaDeTarefas.Application.Interfaces.Usuarios.Handler
 {
     public interface IBuscarUsuarioPorIdHandler
     {

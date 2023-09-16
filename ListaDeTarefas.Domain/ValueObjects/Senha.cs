@@ -1,4 +1,6 @@
-﻿using ListaDeTarefas.Shared.ValueObjects;
+﻿using BCrypt.Net;
+using ListaDeTarefas.Domain.Services;
+using ListaDeTarefas.Shared.ValueObjects;
 
 namespace ListaDeTarefas.Domain.ValueObjects
 {
@@ -8,13 +10,11 @@ namespace ListaDeTarefas.Domain.ValueObjects
         public string Hash { get;  } = string.Empty;
         public string CodigoAlteracao { get; } = Guid.NewGuid().ToString("N")[..8].ToUpper();
 
-        public Senha() { }
+        protected Senha() { }
         public Senha(string senha)
         {
-            Password = senha;
-        }
-
-         
+            Password = senha.Trim().CriptografarSenha();
+        }         
 
     }
 }

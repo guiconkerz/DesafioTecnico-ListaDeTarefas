@@ -1,5 +1,6 @@
 ﻿using ListaDeTarefas.Application.Interfaces.UnitOfWork;
 using ListaDeTarefas.Application.Interfaces.Usuarios;
+using ListaDeTarefas.Application.Interfaces.Usuarios.Handler;
 using ListaDeTarefas.Application.Usuarios.Commands.Excluir.Request;
 using ListaDeTarefas.Application.Usuarios.Commands.Excluir.Response;
 using ListaDeTarefas.Domain.Abstraction;

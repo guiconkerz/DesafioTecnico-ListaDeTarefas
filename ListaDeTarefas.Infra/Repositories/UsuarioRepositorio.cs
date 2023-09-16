@@ -3,7 +3,6 @@ using ListaDeTarefas.Application.Interfaces.Usuarios;
 using ListaDeTarefas.Domain.Models;
 using ListaDeTarefas.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography.X509Certificates;
 
 namespace ListaDeTarefas.Infra.Repositories
 {
@@ -18,19 +17,40 @@ namespace ListaDeTarefas.Infra.Repositories
             _repositorioBase = repositorioBase;
         }
 
-        public async Task AdicionarAsync(Usuario usuario)
+        public async Task AdicionarAsync(Usuario usuario) => 
+            await _repositorioBase
+            .AdicionarAsync(usuario);
+
+        public async Task<bool> AlterarEmail(Usuario usuario)
         {
-            try
+            var alterado =
+                _tarefasContext
+               .Usuarios
+               .Where(x => x.UsuarioId == usuario.UsuarioId)
+               .ExecuteUpdate(x =>
+                x.SetProperty(x => x.Email.Endereco, usuario.Email.Endereco));
+
+            if (alterado == 0)
             {
-                await _repositorioBase.AdicionarAsync(usuario);
+                return false;
             }
-            catch (Exception ex)
-            {
-                throw new Exception($"{ex.Message}");
-            }
+            return true;
         }
 
-        public async Task<Usuario> BuscarPorIdAsync(int id) => await _repositorioBase.ObterPorId(x => x.UsuarioId == id);
+        public async Task<bool> AlterarSenha(Usuario usuario)
+        {
+            var alterado = _tarefasContext
+                            .Usuarios
+                            .Where(x => x.UsuarioId == usuario.UsuarioId)
+                            .ExecuteUpdate(x =>
+                                x.SetProperty(x => x.Senha.Password, usuario.Senha.Password));
+
+            if (alterado == 0)
+            {
+                return false;
+            }
+            return true;
+        }
 
         public async Task<bool> RemoverAsync(int id)
         {
@@ -45,5 +65,19 @@ namespace ListaDeTarefas.Infra.Repositories
             }
             return true;
         }
+
+        public async Task<Usuario> BuscarPorIdAsync(int id) =>
+            await _tarefasContext
+            .Usuarios
+            .AsNoTracking()
+            .Where(x => x.UsuarioId == id)
+            .FirstOrDefaultAsync();
+
+        public async Task<IEnumerable<Usuario>> ListarTodos() =>
+            await _tarefasContext
+            .Usuarios
+            .AsNoTracking()
+            .OrderBy(x => x.UsuarioId)
+            .ToListAsync();
     }
 }

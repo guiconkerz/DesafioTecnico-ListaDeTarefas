@@ -1,9 +1,4 @@
 ﻿using ListaDeTarefas.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ListaDeTarefas.Application.Interfaces.Tarefas
 {
@@ -12,5 +7,8 @@ namespace ListaDeTarefas.Application.Interfaces.Tarefas
         Task AdicionarAsync(Tarefa tarefa);
         Task<bool> AtualizarAsync(Tarefa tarefa);
         Task<bool> RemoverAsync(int id);
+        Task<bool> AlterarStatus(Tarefa tarefa);
+        Task<Tarefa> ObterPorIdAsync(int id);
+        Task<IEnumerable<Tarefa>> ListarTodas();
     }
 }

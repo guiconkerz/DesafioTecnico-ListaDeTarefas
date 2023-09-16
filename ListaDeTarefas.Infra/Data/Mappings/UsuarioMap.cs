@@ -12,6 +12,11 @@ namespace ListaDeTarefas.Infra.Data.Mappings
             builder.Ignore(x => x.Id);
             builder.HasKey(x => x.UsuarioId);
 
+            builder.Property(x => x.UsuarioId)
+                .HasColumnName("UsuarioId")
+                .HasColumnType("int")
+                .UseIdentityColumn();
+
             builder.OwnsOne(x => x.Login)
                 .Property(x => x.Username)
                 .HasColumnName("username")
@@ -35,7 +40,8 @@ namespace ListaDeTarefas.Infra.Data.Mappings
 
             builder.HasMany(x => x.Tarefas)
                 .WithOne(x => x.Usuario)
-                .HasForeignKey(x => x.FkUsuario);
+                .HasForeignKey(x => x.FkUsuario)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

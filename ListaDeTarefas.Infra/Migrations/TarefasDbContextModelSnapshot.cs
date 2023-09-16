@@ -26,7 +26,8 @@ namespace ListaDeTarefas.Infra.Migrations
                 {
                     b.Property<int>("TarefaId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TarefaId");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TarefaId"));
 
@@ -64,7 +65,8 @@ namespace ListaDeTarefas.Infra.Migrations
                 {
                     b.Property<int>("UsuarioId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("UsuarioId");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UsuarioId"));
 

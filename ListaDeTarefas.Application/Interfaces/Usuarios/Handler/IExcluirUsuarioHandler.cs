@@ -1,7 +1,7 @@
 ﻿using ListaDeTarefas.Application.Usuarios.Commands.Excluir.Request;
 using ListaDeTarefas.Domain.Abstraction;
 
-namespace ListaDeTarefas.Application.Interfaces.Usuarios
+namespace ListaDeTarefas.Application.Interfaces.Usuarios.Handler
 {
     public interface IExcluirUsuarioHandler
     {

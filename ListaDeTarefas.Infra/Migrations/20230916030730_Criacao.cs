@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -18,8 +19,7 @@ namespace ListaDeTarefas.Infra.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     username = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
                     Senha = table.Column<string>(type: "varchar(64)", maxLength: 64, nullable: false),
-                    Email = table.Column<string>(type: "varchar(60)", maxLength: 60, nullable: false),
-                    FkTarefa = table.Column<int>(type: "int", nullable: false)
+                    Email = table.Column<string>(type: "varchar(60)", maxLength: 60, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -34,6 +34,7 @@ namespace ListaDeTarefas.Infra.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Titulo = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false),
                     Descricao = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false),
+                    DataEntrega = table.Column<DateTime>(type: "datetime", nullable: false),
                     Finalizada = table.Column<bool>(type: "bit", nullable: false),
                     FkUsuario = table.Column<int>(type: "int", nullable: false)
                 },
@@ -47,6 +48,11 @@ namespace ListaDeTarefas.Infra.Migrations
                         principalColumn: "UsuarioId",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tarefa_FkUsuario",
+                table: "Tarefa",
+                column: "FkUsuario");
         }
 
         /// <inheritdoc />

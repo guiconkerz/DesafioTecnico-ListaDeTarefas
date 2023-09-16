@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ListaDeTarefas.Infra.Migrations
 {
     [DbContext(typeof(TarefasDbContext))]
-    [Migration("20230909103038_CorrigindoMapeamento-v2")]
-    partial class CorrigindoMapeamentov2
+    [Migration("20230916030730_Criacao")]
+    partial class Criacao
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,7 +29,8 @@ namespace ListaDeTarefas.Infra.Migrations
                 {
                     b.Property<int>("TarefaId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TarefaId");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TarefaId"));
 
@@ -67,7 +68,8 @@ namespace ListaDeTarefas.Infra.Migrations
                 {
                     b.Property<int>("UsuarioId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("UsuarioId");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UsuarioId"));
 

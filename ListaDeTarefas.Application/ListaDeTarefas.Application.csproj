@@ -14,13 +14,4 @@
     <ProjectReference Include="..\ListaDeTarefas.Domain\ListaDeTarefas.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Tarefas\Commands\MarcarEmAndamento\Handler\" />
-    <Folder Include="Tarefas\Commands\MarcarEmAndamento\Request\" />
-    <Folder Include="Tarefas\Commands\MarcarEmAndamento\Response\" />
-    <Folder Include="Tarefas\Commands\MarcarFinalizada\Handler\" />
-    <Folder Include="Tarefas\Commands\MarcarFinalizada\Request\" />
-    <Folder Include="Tarefas\Commands\MarcarFinalizada\Response\" />
-  </ItemGroup>
-
 </Project>

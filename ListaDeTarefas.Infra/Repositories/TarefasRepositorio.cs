@@ -17,23 +17,13 @@ namespace ListaDeTarefas.Infra.Repositories
             _repositorioBase = repositorioBase;
         }
 
-        public async Task AdicionarAsync(Tarefa tarefa)
-        {
-            try
-            {
-                await _repositorioBase.AdicionarAsync(tarefa);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"{ex.Message}");
-            }
-        }
+        public async Task AdicionarAsync(Tarefa tarefa) => _tarefasContext.Tarefas.Add(tarefa);
 
         public async Task<bool> AtualizarAsync(Tarefa tarefa)
         {
             var atualizado = await _tarefasContext
                 .Tarefas
-                .Where(x => x.Id == tarefa.Id)
+                .Where(x => x.TarefaId == tarefa.TarefaId)
                 .ExecuteUpdateAsync(x =>
                     x.SetProperty(x => x.Titulo, tarefa.Titulo)
                      .SetProperty(x => x.Descricao, tarefa.Descricao)
@@ -47,6 +37,20 @@ namespace ListaDeTarefas.Infra.Repositories
             return true;
         }
 
+        public async Task<bool> AlterarStatus(Tarefa tarefa)
+        {
+            var atualizado = await _tarefasContext
+                .Tarefas
+                .Where(x => x.TarefaId == tarefa.TarefaId)
+                .ExecuteUpdateAsync(x =>
+                    x.SetProperty(x => x.Finalizada, tarefa.Finalizada));
+
+            if (atualizado == 0)
+            {
+                return false;
+            }
+            return true;
+        }
         public async Task<bool> RemoverAsync(int id)
         {
             var removido = await _tarefasContext
@@ -60,5 +64,19 @@ namespace ListaDeTarefas.Infra.Repositories
             }
             return true;
         }
+
+        public async Task<Tarefa> ObterPorIdAsync(int id) =>
+            await _tarefasContext
+                    .Tarefas
+                    .AsNoTracking()
+                    .Where(x => x.TarefaId == id)
+                    .FirstOrDefaultAsync();
+
+        public async Task<IEnumerable<Tarefa>> ListarTodas() =>
+            await _tarefasContext
+            .Tarefas
+            .AsNoTracking()
+            .OrderBy(x => x.TarefaId)
+            .ToListAsync();
     }
 }

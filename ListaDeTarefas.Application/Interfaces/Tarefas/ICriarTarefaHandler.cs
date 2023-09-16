@@ -5,6 +5,6 @@ namespace ListaDeTarefas.Application.Interfaces.Tarefas
 {
     public interface ICriarTarefaHandler
     {
-        Task<IResponse> Handler(CriarTarefaRequest request);
+        Task<IResponse> Handle(CriarTarefaRequest request);
     }
 }

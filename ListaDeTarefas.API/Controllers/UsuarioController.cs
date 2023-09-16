@@ -1,12 +1,9 @@
-﻿using ListaDeTarefas.Application.Interfaces.UnitOfWork;
-using ListaDeTarefas.Application.Interfaces.Usuarios;
+﻿using ListaDeTarefas.Application.Interfaces.Usuarios.Handler;
+using ListaDeTarefas.Application.Usuarios.Commands.AlterarSenha.Request;
 using ListaDeTarefas.Application.Usuarios.Commands.Criar.Request;
-using ListaDeTarefas.Application.Usuarios.Commands.Criar.Response;
 using ListaDeTarefas.Application.Usuarios.Commands.Excluir.Request;
-using ListaDeTarefas.Domain.Abstraction;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using System.Net;
 
 namespace ListaDeTarefas.API.Controllers
 {
@@ -15,33 +12,54 @@ namespace ListaDeTarefas.API.Controllers
     public class UsuarioController : ControllerBase
     {
         [HttpPost]
-        [Route("/")]
-        public async Task<IResponse> Post(
+        [Route("/CriarUsuario")]
+        public async Task<IActionResult> Criar(
             [FromServices] ICriarUsuarioHandler _handler,
             [FromBody] CriarUsuarioRequest request)
         {
             var response = await _handler.Handle(request);
-            return response;
+            if (response.StatusCode is HttpStatusCode.BadRequest)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
         }
 
         [HttpDelete]
         [Route("/{id}")]
-        public async Task<IResponse> Delete(
+        public async Task<IActionResult> Excluir(
             [FromServices] IExcluirUsuarioHandler _handler,
             [FromRoute] int id)
         {
             var request = new ExcluirUsuarioRequest(id);
             var response = await _handler.Handle(request);
-            return response;
+
+            if (response.StatusCode is HttpStatusCode.BadRequest)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
         }
 
-        //[HttpGet]
-        //[Route("/{id}")]
-        //public async Task<BuscarUsuarioPorIdResponse> Get([FromRoute]BuscarUsuarioPorIdQuery request)
-        //{
-        //    var response = await _usuarioPorIdHandler.Handle(request);
-        //    return response;
-        //}
+        [HttpPut]
+        [Route("/AlterarSenha")]
+        public async Task<IActionResult> AlterarSenha(
+            [FromBody] AlterarSenhaRequest request,
+            [FromServices] IAlterarSenhaHandler _handler)
+        {
+            var response = await _handler.Handle(request);
+
+            if (response.StatusCode == HttpStatusCode.BadRequest)
+            {
+                return BadRequest(response);
+            }
+            if (response.StatusCode == HttpStatusCode.InternalServerError)
+            {
+                return StatusCode(500, response);
+            }
+            return Ok(response);
+        }
+
 
     }
 }

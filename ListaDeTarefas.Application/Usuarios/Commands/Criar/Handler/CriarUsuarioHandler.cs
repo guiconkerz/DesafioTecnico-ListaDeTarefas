@@ -1,5 +1,6 @@
 ﻿using ListaDeTarefas.Application.Interfaces.UnitOfWork;
 using ListaDeTarefas.Application.Interfaces.Usuarios;
+using ListaDeTarefas.Application.Interfaces.Usuarios.Handler;
 using ListaDeTarefas.Application.Usuarios.Commands.Criar.Request;
 using ListaDeTarefas.Application.Usuarios.Commands.Criar.Response;
 using ListaDeTarefas.Domain.Abstraction;
@@ -48,7 +49,7 @@ namespace ListaDeTarefas.Application.Usuarios.Commands.Criar.Handler
             catch (Exception ex)
             {
                 _unitOfWork.Rollback();
-                throw;
+                throw new Exception($"{ex.Message}");
             }
             finally
             {
