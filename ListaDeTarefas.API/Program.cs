@@ -6,11 +6,11 @@ using ListaDeTarefas.Application.Interfaces.Usuarios.Handler;
 using ListaDeTarefas.Application.Tarefas.Commands.Criar.Handler;
 using ListaDeTarefas.Application.Tarefas.Commands.MarcarEmAndamento.Handler;
 using ListaDeTarefas.Application.Tarefas.Commands.MarcarFinalizada.Handler;
-using ListaDeTarefas.Application.Tarefas.Queries;
 using ListaDeTarefas.Application.Usuarios.Commands.AlterarSenha.Handler;
 using ListaDeTarefas.Application.Usuarios.Commands.Criar.Handler;
 using ListaDeTarefas.Application.Usuarios.Commands.Excluir.Handler;
 using ListaDeTarefas.Infra.Data.Context;
+using ListaDeTarefas.Infra.Queries;
 using ListaDeTarefas.Infra.Repositories;
 using Microsoft.EntityFrameworkCore;
 

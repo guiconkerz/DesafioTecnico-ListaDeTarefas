@@ -14,11 +14,6 @@ namespace ListaDeTarefas.Infra.Data.Mappings
 
             builder.HasKey(x => x.TarefaId);
 
-            builder.Property(x => x.TarefaId)
-                .HasColumnName("TarefaId")
-                .HasColumnType("int")
-                .UseIdentityColumn();
-
             builder.Property(x => x.Titulo)
                 .HasColumnName("Titulo")
                 .HasColumnType("varchar")
@@ -43,8 +38,7 @@ namespace ListaDeTarefas.Infra.Data.Mappings
 
             builder.HasOne(x => x.Usuario)
                 .WithMany(u => u.Tarefas)
-                .HasForeignKey(x => x.FkUsuario)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(x => x.FkUsuario);
 
         }
     }

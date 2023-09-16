@@ -2,7 +2,7 @@
 using ListaDeTarefas.Application.Tarefas.Commands.Criar.Request;
 using ListaDeTarefas.Application.Tarefas.Commands.MarcarEmAndamento.Request;
 using ListaDeTarefas.Application.Tarefas.Commands.MarcarFinalizada.Request;
-using ListaDeTarefas.Application.Tarefas.Queries;
+using ListaDeTarefas.Infra.Queries;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -52,40 +52,12 @@ namespace ListaDeTarefas.API.Controllers
         }
 
         [HttpGet]
-        [Route("/{id}")]
+        [Route("/ListarTarefa/{idTarefa}")]
         public async Task<IActionResult> Listar(
             [FromServices] ITarefasQueries queries,
-            [FromRoute] int id)
+            [FromRoute] int idTarefa)
         {
-            var tarefa = await queries.ListarTarefa(id);
-            if (tarefa is null)
-            {
-                return BadRequest($"Tarefa não encontrada.");
-            }
-            return Ok(tarefa);
-        }
-
-        [HttpGet]
-        [Route("/ListarFinalizada/{id}")]
-        public async Task<IActionResult> ListarFinalizada(
-            [FromServices] ITarefasQueries queries,
-            [FromRoute] int id)
-        {
-            var tarefa = await queries.ListarTarefaFinalizada(id);
-            if (tarefa is null)
-            {
-                return BadRequest($"Tarefa não encontrada.");
-            }
-            return Ok(tarefa);
-        }
-
-        [HttpGet]
-        [Route("/ListarEmAndamento/{id}")]
-        public async Task<IActionResult> ListarEmAndamento(
-            [FromServices] ITarefasQueries queries,
-            [FromRoute] int id)
-        {
-            var tarefa = await queries.ListarTarefaEmAndamento(id);
+            var tarefa = await queries.ListarTarefa(idTarefa);
             if (tarefa is null)
             {
                 return BadRequest($"Tarefa não encontrada.");

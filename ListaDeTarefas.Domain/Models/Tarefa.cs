@@ -5,7 +5,13 @@ namespace ListaDeTarefas.Domain.Models
     public sealed class Tarefa : Entity
     {
         protected Tarefa() { }
-        public Tarefa(string titulo, string descricao, DateTime dataEntrega, bool finalizada, Usuario usuario) => (Titulo, Descricao, DataEntrega, Finalizada, Usuario) = (titulo, descricao, dataEntrega, finalizada, usuario);
+        public Tarefa(string titulo, string descricao, DateTime dataEntrega, bool finalizada)
+        {
+            Titulo = titulo;
+            Descricao = descricao;
+            DataEntrega = dataEntrega;
+            Finalizada = finalizada;
+        }
 
         public int TarefaId { get; private set; }
         public string Titulo { get; private set; } = string.Empty;
@@ -17,17 +23,19 @@ namespace ListaDeTarefas.Domain.Models
 
         public void MarcarComoFinalizada()
         {
-            if (!Finalizada)
+            if (Finalizada)
             {
-                Finalizada = true;
+                return;
             }
+            Finalizada = true;
         }
         public void MarcarComoEmAndamento()
         {
-            if (Finalizada)
+            if (!Finalizada)
             {
-                Finalizada = false;
+                return;
             }
+            Finalizada = false;
         }
 
         public bool PrazoTarefaExpirada()
@@ -37,6 +45,15 @@ namespace ListaDeTarefas.Domain.Models
                 return false;
             }
             return true;
+        }
+
+        public void VincularUsuario(Usuario usuario)
+        {
+            if (usuario is null)
+            {
+                AddNotification("Tarefa.Usuario", "Usuario inválido");
+            }
+            Usuario = usuario;
         }
 
     }

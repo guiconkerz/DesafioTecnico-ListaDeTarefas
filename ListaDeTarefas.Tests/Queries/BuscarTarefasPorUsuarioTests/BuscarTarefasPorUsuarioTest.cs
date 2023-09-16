@@ -46,15 +46,15 @@ namespace ListaDeTarefas.Tests.Queries.BuscarTarefasPorUsuarioTests
 
             _tarefas = new List<Tarefa>
             {
-                new Tarefa(titulo: "Tarefa 1", descricao: "tenho que fazer a tarefa 1", new DateTime(2023, 09, 09), finalizada: false, _usuario1),
-                new Tarefa(titulo: "Tarefa 2", descricao: "tenho que fazer a tarefa 2", new DateTime(2023, 09, 12), finalizada: false, _usuario3),
-                new Tarefa(titulo: "Tarefa 3", descricao: "tenho que fazer a tarefa 3", new DateTime(2023, 09, 20), finalizada: false, _usuario4),
-                new Tarefa(titulo: "Tarefa 4", descricao: "tenho que fazer a tarefa 4", new DateTime(2023, 09, 15), finalizada: false, _usuario1),
-                new Tarefa(titulo: "Tarefa 5", descricao: "tenho que fazer a tarefa 5", new DateTime(2023, 09, 10), finalizada: true, _usuario3),
-                new Tarefa(titulo: "Tarefa 6", descricao: "tenho que fazer a tarefa 6", new DateTime(2023, 09, 10), finalizada: false, _usuario2),
-                new Tarefa(titulo: "Tarefa 7", descricao: "tenho que fazer a tarefa 7", new DateTime(2023, 09, 14), finalizada: true, _usuario4),
-                new Tarefa(titulo: "Tarefa 8", descricao: "tenho que fazer a tarefa 8", new DateTime(2023, 09, 11), finalizada: true, _usuario2),
-                new Tarefa(titulo: "Tarefa 9", descricao: "tenho que fazer a tarefa 9", new DateTime(2023, 09, 08), finalizada: true, _usuario1),
+                new Tarefa(titulo: "Tarefa 1", descricao: "tenho que fazer a tarefa 1", new DateTime(2023, 09, 09), finalizada: false),
+                new Tarefa(titulo: "Tarefa 2", descricao: "tenho que fazer a tarefa 2", new DateTime(2023, 09, 12), finalizada: false),
+                new Tarefa(titulo: "Tarefa 3", descricao: "tenho que fazer a tarefa 3", new DateTime(2023, 09, 20), finalizada: false),
+                new Tarefa(titulo: "Tarefa 4", descricao: "tenho que fazer a tarefa 4", new DateTime(2023, 09, 15), finalizada: false),
+                new Tarefa(titulo: "Tarefa 5", descricao: "tenho que fazer a tarefa 5", new DateTime(2023, 09, 10), finalizada: true),
+                new Tarefa(titulo: "Tarefa 6", descricao: "tenho que fazer a tarefa 6", new DateTime(2023, 09, 10), finalizada: false),
+                new Tarefa(titulo: "Tarefa 7", descricao: "tenho que fazer a tarefa 7", new DateTime(2023, 09, 14), finalizada: true),
+                new Tarefa(titulo: "Tarefa 8", descricao: "tenho que fazer a tarefa 8", new DateTime(2023, 09, 11), finalizada: true),
+                new Tarefa(titulo: "Tarefa 9", descricao: "tenho que fazer a tarefa 9", new DateTime(2023, 09, 08), finalizada: true),
             };
         }
 

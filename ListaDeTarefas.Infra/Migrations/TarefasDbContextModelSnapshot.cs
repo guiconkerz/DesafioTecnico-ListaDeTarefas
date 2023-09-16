@@ -88,7 +88,7 @@ namespace ListaDeTarefas.Infra.Migrations
 
             modelBuilder.Entity("ListaDeTarefas.Domain.Models.Usuario", b =>
                 {
-                    b.OwnsOne("ListaDeTarefas.Domain.ValueObjects.Email", "Email", b1 =>
+                    b.OwnsOne("ListaDeTarefas.Domain.Models.Usuario.Email#ListaDeTarefas.Domain.ValueObjects.Email", "Email", b1 =>
                         {
                             b1.Property<int>("UsuarioId")
                                 .HasColumnType("int");
@@ -101,13 +101,13 @@ namespace ListaDeTarefas.Infra.Migrations
 
                             b1.HasKey("UsuarioId");
 
-                            b1.ToTable("Usuario");
+                            b1.ToTable("Usuario", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("UsuarioId");
                         });
 
-                    b.OwnsOne("ListaDeTarefas.Domain.ValueObjects.Login", "Login", b1 =>
+                    b.OwnsOne("ListaDeTarefas.Domain.Models.Usuario.Login#ListaDeTarefas.Domain.ValueObjects.Login", "Login", b1 =>
                         {
                             b1.Property<int>("UsuarioId")
                                 .HasColumnType("int");
@@ -120,13 +120,13 @@ namespace ListaDeTarefas.Infra.Migrations
 
                             b1.HasKey("UsuarioId");
 
-                            b1.ToTable("Usuario");
+                            b1.ToTable("Usuario", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("UsuarioId");
                         });
 
-                    b.OwnsOne("ListaDeTarefas.Domain.ValueObjects.Senha", "Senha", b1 =>
+                    b.OwnsOne("ListaDeTarefas.Domain.Models.Usuario.Senha#ListaDeTarefas.Domain.ValueObjects.Senha", "Senha", b1 =>
                         {
                             b1.Property<int>("UsuarioId")
                                 .HasColumnType("int");
@@ -139,7 +139,7 @@ namespace ListaDeTarefas.Infra.Migrations
 
                             b1.HasKey("UsuarioId");
 
-                            b1.ToTable("Usuario");
+                            b1.ToTable("Usuario", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("UsuarioId");

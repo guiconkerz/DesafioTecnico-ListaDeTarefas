@@ -13,6 +13,7 @@ namespace ListaDeTarefas.Domain.Models
         public Login Login { get; private set; }
         public Senha Senha { get; private set; }
         public Email Email { get; private set; }
+
         public ICollection<Tarefa> Tarefas { get; private set; } = new List<Tarefa>();
 
         public void AlterarEmail(Email email)
@@ -31,6 +32,15 @@ namespace ListaDeTarefas.Domain.Models
                 AddNotification("Usuario.Senha", "Senha informada inválida.");
             }
             Senha = senha;
+        }
+
+        public void AdicionarTarefa(Tarefa tarefa)
+        {
+            if (tarefa is null)
+            {
+                AddNotification("Usuario.Tarefa", "Tarefa informada inválida.");
+            }
+            Tarefas.Add(tarefa);
         }
 
     }

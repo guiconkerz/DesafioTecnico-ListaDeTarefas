@@ -35,8 +35,8 @@ namespace ListaDeTarefas.Application.Tarefas.Commands.Criar.Handler
             
             try
             {
-                var usuario = await _usuarioRepositorio.BuscarPorIdAsync(request.IdUsuario);
-                if (usuario is null)
+                var usuarioDB = await _usuarioRepositorio.BuscarPorIdAsync(request.IdUsuario);
+                if (usuarioDB is null)
                 {
                     return new CriarTarefaResponse(statusCode: HttpStatusCode.BadRequest,
                                                 mensagem: $"Usuário informado não foi encontrado.",
@@ -46,8 +46,10 @@ namespace ListaDeTarefas.Application.Tarefas.Commands.Criar.Handler
                 var tarefa = new Tarefa(titulo: request.Titulo,
                                         descricao: request.Descricao,
                                         dataEntrega: request.DataEntrega,
-                                        finalizada: request.Finalizada,
-                                        usuario: usuario);
+                                        finalizada: false);
+
+                tarefa.VincularUsuario(usuarioDB);
+                usuarioDB.AdicionarTarefa(tarefa);
 
                 _unitOfWork.BeginTransaction();
                 await _tarefaRepositorio.AdicionarAsync(tarefa);

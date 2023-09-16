@@ -69,14 +69,12 @@ namespace ListaDeTarefas.Infra.Repositories
         public async Task<Usuario> BuscarPorIdAsync(int id) =>
             await _tarefasContext
             .Usuarios
-            .AsNoTracking()
             .Where(x => x.UsuarioId == id)
             .FirstOrDefaultAsync();
 
         public async Task<IEnumerable<Usuario>> ListarTodos() =>
             await _tarefasContext
             .Usuarios
-            .AsNoTracking()
             .OrderBy(x => x.UsuarioId)
             .ToListAsync();
     }

@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListaDeTarefas.Shared", "Li
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListaDeTarefas.Tests", "ListaDeTarefas.Tests\ListaDeTarefas.Tests.csproj", "{E7A64402-EB6D-47D3-8243-726F1D294371}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListaDeTarefas.API", "ListaDeTarefas.API\ListaDeTarefas.API.csproj", "{B523EC6F-0F4E-4E3D-B022-41BDC0788A89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListaDeTarefas.API", "ListaDeTarefas.API\ListaDeTarefas.API.csproj", "{B523EC6F-0F4E-4E3D-B022-41BDC0788A89}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
