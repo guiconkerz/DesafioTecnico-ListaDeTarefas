@@ -31,8 +31,8 @@ namespace ListaDeTarefas.Application.Tarefas.Commands.Criar.Handler
                                             Mensagem: "Falha na requisição para criar um usuário.",
                                             Notifications: request.Notifications);
             }
-            
-            
+
+
             try
             {
                 var usuarioDB = await _usuarioRepositorio.BuscarPorIdAsync(request.IdUsuario);

@@ -27,7 +27,7 @@ namespace ListaDeTarefas.Application.Tarefas.Commands.MarcarEmAndamento.Handler
                                             Mensagem: "Falha na requisição para criar um usuário.",
                                             Notifications: request.Notifications);
             }
-            
+
             try
             {
                 var tarefa = await _tarefaRepositorio.ObterPorIdAsync(request.IdTarefa);

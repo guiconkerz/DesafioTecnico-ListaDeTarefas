@@ -1,4 +1,5 @@
-﻿using ListaDeTarefas.Application.Interfaces.UnitOfWork;
+﻿using ListaDeTarefas.Application.Interfaces.Services;
+using ListaDeTarefas.Application.Interfaces.UnitOfWork;
 using ListaDeTarefas.Application.Interfaces.Usuarios;
 using ListaDeTarefas.Application.Interfaces.Usuarios.Handler;
 using ListaDeTarefas.Application.Usuarios.Commands.Criar.Request;
@@ -14,11 +15,13 @@ namespace ListaDeTarefas.Application.Usuarios.Commands.Criar.Handler
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUsuarioRepositorio _usuarioRepositorio;
+        private readonly IEmailService _emailService;
 
-        public CriarUsuarioHandler(IUnitOfWork unitOfWork, IUsuarioRepositorio usuarioRepositorio)
+        public CriarUsuarioHandler(IUnitOfWork unitOfWork, IUsuarioRepositorio usuarioRepositorio, IEmailService emailService)
         {
             _unitOfWork = unitOfWork;
             _usuarioRepositorio = usuarioRepositorio;
+            _emailService = emailService;
         }
 
         public async Task<IResponse> Handle(CriarUsuarioRequest request)
@@ -31,15 +34,27 @@ namespace ListaDeTarefas.Application.Usuarios.Commands.Criar.Handler
                                                 Notifications: request.Notifications);
             }
 
-            var usuario = new Usuario(
-                login: new Login(username: request.Login),
-                senha: new Senha(senha: request.Senha),
-                email: new Email(request.Email));
-
             try
             {
                 _unitOfWork.BeginTransaction();
+
+                var emailCadastrado = await _usuarioRepositorio.EmailCadastrado(request.Email);
+
+                if (emailCadastrado)
+                {
+                    return new CriarUsuarioResponse(StatusCode: HttpStatusCode.BadRequest,
+                                                Mensagem: "Este e-mail já está cadastrado.",
+                                                Notifications: request.Notifications);
+                }
+
+                var usuario = new Usuario(
+                                    login: new Domain.ValueObjects.Login(username: request.Login),
+                                    senha: new Senha(senha: request.Senha),
+                                    email: new Email(request.Email));
+
                 await _usuarioRepositorio.AdicionarAsync(usuario);
+                await _emailService.EnviarEmailVerificacao(usuario);
+
                 _unitOfWork.Commit();
 
                 return new CriarUsuarioResponse(StatusCode: HttpStatusCode.OK,

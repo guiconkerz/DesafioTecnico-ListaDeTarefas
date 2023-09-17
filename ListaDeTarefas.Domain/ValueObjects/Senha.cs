@@ -1,4 +1,5 @@
-﻿using ListaDeTarefas.Infra.Services;
+﻿using BCrypt.Net;
+using ListaDeTarefas.Domain.Services;
 using ListaDeTarefas.Shared.ValueObjects;
 
 namespace ListaDeTarefas.Domain.ValueObjects
@@ -12,6 +13,11 @@ namespace ListaDeTarefas.Domain.ValueObjects
         public Senha(string senha)
         {
             Password = senha.Trim().CriptografarSenha();
+        }
+
+        public bool Verificar(string senha, string senhaCriptografada)
+        {
+            return BCrypt.Net.BCrypt.Verify(senha, senhaCriptografada);
         }
 
     }

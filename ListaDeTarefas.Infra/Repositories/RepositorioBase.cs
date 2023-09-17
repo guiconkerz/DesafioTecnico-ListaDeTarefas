@@ -1,16 +1,12 @@
 ﻿using ListaDeTarefas.Application.Interfaces.RepositoryBase;
 using ListaDeTarefas.Infra.Data.Context;
+using ListaDeTarefas.Shared.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ListaDeTarefas.Infra.Repositories
 {
-    public class RepositorioBase<T> : IRepositorioBase<T> where T : class
+    public class RepositorioBase<T> : IRepositorioBase<T> where T : Entity
     {
         private readonly TarefasDbContext _context;
         private readonly DbSet<T> _dbSet;

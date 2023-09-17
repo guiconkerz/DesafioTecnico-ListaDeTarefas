@@ -3,14 +3,12 @@ using ListaDeTarefas.Application.Interfaces.Usuarios.Handler;
 using ListaDeTarefas.Application.Usuarios.Commands.AlterarSenha.Request;
 using ListaDeTarefas.Application.Usuarios.Commands.Criar.Request;
 using ListaDeTarefas.Application.Usuarios.Commands.Excluir.Request;
-using ListaDeTarefas.Domain.Models;
 using ListaDeTarefas.Infra.Queries;
 using ListaDeTarefas.Infra.Services;
 using ListaDeTarefas.Infra.Services.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using System.Security.Claims;
 
 namespace ListaDeTarefas.API.Controllers
 {
@@ -18,13 +16,6 @@ namespace ListaDeTarefas.API.Controllers
     [ApiController]
     public class UsuarioController : ControllerBase
     {
-        private readonly IUsuarioRepositorio __usuarioRepositorio;
-
-        public UsuarioController(IUsuarioRepositorio usuarioRepositorio)
-        {
-            __usuarioRepositorio = usuarioRepositorio;
-        }
-
         [HttpGet]
         [Route("/ListarTodas/{idUsuario}")]
         public async Task<IActionResult> ListarTodas(
@@ -120,9 +111,10 @@ namespace ListaDeTarefas.API.Controllers
         [Route("/GerarToken/{idUsuario}")]
         public async Task<IActionResult> CriarToken(
             [FromServices] TokenServices services,
+            [FromServices] IUsuarioRepositorio usuarioRepositorio,
             [FromRoute] int idUsuario)
         {
-            var usuario = await __usuarioRepositorio.BuscarPorIdAsync(idUsuario);
+            var usuario = await usuarioRepositorio.BuscarPorIdAsync(idUsuario);
             if (usuario == null) return NotFound($"Usuário informado não encontrado.");
             var token = services.Criar(usuario);
             
@@ -144,6 +136,13 @@ namespace ListaDeTarefas.API.Controllers
         {
             var claim = User.Identity.Name;
             return Ok($"Bem vindo {claim}");
+        }
+
+        [HttpGet]
+        [Route("/Secrets")]
+        public async Task<IActionResult> ObterSecrets()
+        {
+            return Ok($"Bem vindo");
         }
 
     }

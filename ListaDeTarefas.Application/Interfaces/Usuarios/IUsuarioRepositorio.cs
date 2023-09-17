@@ -10,5 +10,7 @@ namespace ListaDeTarefas.Application.Interfaces.Usuarios
         Task<bool> AlterarEmail(Usuario usuario);
         Task<Usuario> BuscarPorIdAsync(int id);
         Task<IEnumerable<Usuario>> ListarTodos();
+        Task<bool> EmailCadastrado(string email);
+        Task<Usuario> BuscarPorEmailAsync(string email);
     }
 }

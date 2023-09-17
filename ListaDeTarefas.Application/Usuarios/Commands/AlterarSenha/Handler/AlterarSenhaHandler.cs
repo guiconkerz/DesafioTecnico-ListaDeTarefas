@@ -34,11 +34,11 @@ namespace ListaDeTarefas.Application.Usuarios.Commands.AlterarSenha.Handler
                 var usuario = await _usuarioRepositorio.BuscarPorIdAsync(request.Id);
                 if (usuario is null)
                 {
-                    return new AlterarSenhaResponse(StatusCode: HttpStatusCode.BadRequest, 
-                                                    Mensagem: $"Não foi encontrado usuário com Id {request.Id}", 
+                    return new AlterarSenhaResponse(StatusCode: HttpStatusCode.BadRequest,
+                                                    Mensagem: $"Não foi encontrado usuário com Id {request.Id}",
                                                     Notifications: request.Notifications);
                 }
-                
+
                 usuario.AlterarSenha(new Senha(request.NovaSenha));
 
                 _unitOfWork.BeginTransaction();
@@ -46,14 +46,14 @@ namespace ListaDeTarefas.Application.Usuarios.Commands.AlterarSenha.Handler
                 var senhaAlterada = await _usuarioRepositorio.AlterarSenha(usuario);
                 if (senhaAlterada == false)
                 {
-                    return new AlterarSenhaResponse(StatusCode: HttpStatusCode.InternalServerError, 
-                                                    Mensagem: $"Houve uma falha ao alterar senha do usuário {usuario.Email.Endereco}. Por favor, tente novamente mais tarde.", 
+                    return new AlterarSenhaResponse(StatusCode: HttpStatusCode.InternalServerError,
+                                                    Mensagem: $"Houve uma falha ao alterar senha do usuário {usuario.Email.Endereco}. Por favor, tente novamente mais tarde.",
                                                     Notifications: request.Notifications);
                 }
 
                 _unitOfWork.Commit();
-                return new AlterarSenhaResponse(StatusCode: HttpStatusCode.OK, 
-                                                Mensagem: $"Senha alterada com sucesso!", 
+                return new AlterarSenhaResponse(StatusCode: HttpStatusCode.OK,
+                                                Mensagem: $"Senha alterada com sucesso!",
                                                 Notifications: request.Notifications);
             }
             catch (Exception ex)

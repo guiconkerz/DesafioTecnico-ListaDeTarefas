@@ -24,7 +24,9 @@ namespace ListaDeTarefas.Application.Tarefas.Commands.Criar.Request
             AddNotifications(new Contract<Notification>()
                 .Requires()
                 .IsNotNullOrWhiteSpace(Titulo, "CriarTarefaRequest.Titulo", "Título inválido.")
+                .IsLowerThan(Titulo, 30, "CriarTarefaRequest.Titulo", "Título da tarefa deve ser menor que 30 caracteres.")
                 .IsNotNullOrWhiteSpace(Descricao, "CriarTarefaRequest.Descricao", "Descricao inválido.")
+                .IsLowerThan(Descricao, 300, "CriarTarefaRequest.Descricao", "Descricao da tarefa deve ser menor que 300 caracteres.")
                 .IsNotNull(IdUsuario, "CriarTarefaRequest.Usuario", "Usuario inválido.")
                 .IsFalse(DataEntrega.Day < DateTime.Now.Day, "CriarTarefaRequest.DataEntrega", "Não é possível criar uma tarefa com prazo de entrega inferior ao dia atual.")
                 );

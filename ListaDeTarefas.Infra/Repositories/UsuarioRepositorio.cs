@@ -77,5 +77,15 @@ namespace ListaDeTarefas.Infra.Repositories
             .Usuarios
             .OrderBy(x => x.UsuarioId)
             .ToListAsync();
+
+        public async Task<bool> EmailCadastrado(string email) =>
+            await _tarefasContext
+            .Usuarios
+            .AnyAsync(x => x.Email.Endereco == email);
+
+        public Task<Usuario> BuscarPorEmailAsync(string email)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

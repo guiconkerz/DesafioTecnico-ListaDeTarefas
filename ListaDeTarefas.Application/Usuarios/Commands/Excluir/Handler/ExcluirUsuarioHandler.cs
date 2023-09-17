@@ -34,14 +34,14 @@ namespace ListaDeTarefas.Application.Usuarios.Commands.Excluir.Handler
                 var removido = await _usuarioRepositorio.RemoverAsync(request.Id);
                 if (removido == false)
                 {
-                    return new ExcluirUsuarioResponse(StatusCode: HttpStatusCode.BadRequest, 
-                                                      Mensagem: $"Nenhum usuário com Id {request.Id} cadastrado.", 
+                    return new ExcluirUsuarioResponse(StatusCode: HttpStatusCode.BadRequest,
+                                                      Mensagem: $"Nenhum usuário com Id {request.Id} cadastrado.",
                                                       Notifications: request.Notifications);
                 }
                 _unitOfWork.Commit();
 
-                return new ExcluirUsuarioResponse(StatusCode: HttpStatusCode.OK, 
-                                                  Mensagem: $"Usuario com Id {request.Id} excluído com sucesso.", 
+                return new ExcluirUsuarioResponse(StatusCode: HttpStatusCode.OK,
+                                                  Mensagem: $"Usuario com Id {request.Id} excluído com sucesso.",
                                                   Notifications: request.Notifications);
             }
             catch (Exception ex)

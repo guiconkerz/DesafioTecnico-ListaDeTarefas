@@ -1,4 +1,5 @@
-﻿using ListaDeTarefas.Application.Interfaces.UnitOfWork;
+﻿using ListaDeTarefas.Application.Interfaces.Services;
+using ListaDeTarefas.Application.Interfaces.UnitOfWork;
 using ListaDeTarefas.Application.Interfaces.Usuarios;
 using ListaDeTarefas.Application.Usuarios.Commands.Criar.Handler;
 using ListaDeTarefas.Application.Usuarios.Commands.Criar.Request;
@@ -12,6 +13,7 @@ namespace ListaDeTarefas.Tests.Commands.Criar
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUsuarioRepositorio _usuarioRepositorio;
+        private readonly IEmailService _emailService;
         private readonly Usuario _usuario;
         private readonly Login _login;
         private readonly Senha _senha;
@@ -34,7 +36,7 @@ namespace ListaDeTarefas.Tests.Commands.Criar
             var request = new CriarUsuarioRequest(login: _login.Username.Trim(),
                                                   senha: _senha.Password.Trim(),
                                                   email: email.Trim());
-            var response = new CriarUsuarioHandler(_unitOfWork, _usuarioRepositorio).Handle(request).GetAwaiter().GetResult();
+            var response = new CriarUsuarioHandler(_unitOfWork, _usuarioRepositorio, _emailService).Handle(request).GetAwaiter().GetResult();
             Assert.IsTrue(response.Notifications.Count > 0);
         }
 
@@ -50,7 +52,7 @@ namespace ListaDeTarefas.Tests.Commands.Criar
             var request = new CriarUsuarioRequest(login: _login.Username.Trim(),
                                                   senha: _senha.Password.Trim(),
                                                   email: email.Trim());
-            var response = new CriarUsuarioHandler(_unitOfWork, _usuarioRepositorio).Handle(request).GetAwaiter().GetResult();
+            var response = new CriarUsuarioHandler(_unitOfWork, _usuarioRepositorio, _emailService).Handle(request).GetAwaiter().GetResult();
             Assert.IsTrue(response.Notifications.Count == 0);
         }
 
@@ -63,7 +65,7 @@ namespace ListaDeTarefas.Tests.Commands.Criar
             var request = new CriarUsuarioRequest(login: login.Trim(),
                                                   senha: _senha.Password.Trim(),
                                                   email: _email.Endereco.Trim());
-            var response = new CriarUsuarioHandler(_unitOfWork, _usuarioRepositorio).Handle(request).GetAwaiter().GetResult();
+            var response = new CriarUsuarioHandler(_unitOfWork, _usuarioRepositorio, _emailService).Handle(request).GetAwaiter().GetResult();
             Assert.IsTrue(response.Notifications.Count > 0);
         }
 
@@ -80,7 +82,7 @@ namespace ListaDeTarefas.Tests.Commands.Criar
             var request = new CriarUsuarioRequest(login: login.Trim(),
                                                   senha: _senha.Password.Trim(),
                                                   email: _email.Endereco.Trim());
-            var response = new CriarUsuarioHandler(_unitOfWork, _usuarioRepositorio).Handle(request).GetAwaiter().GetResult();
+            var response = new CriarUsuarioHandler(_unitOfWork, _usuarioRepositorio, _emailService).Handle(request).GetAwaiter().GetResult();
             Assert.IsTrue(response.Notifications.Count == 0);
         }
 
@@ -115,7 +117,7 @@ namespace ListaDeTarefas.Tests.Commands.Criar
             var request = new CriarUsuarioRequest(login: _login.Username.Trim(),
                                                   senha: senha.Trim(),
                                                   email: _email.Endereco.Trim());
-            var response = new CriarUsuarioHandler(_unitOfWork, _usuarioRepositorio).Handle(request).GetAwaiter().GetResult();
+            var response = new CriarUsuarioHandler(_unitOfWork, _usuarioRepositorio, _emailService).Handle(request).GetAwaiter().GetResult();
             Assert.IsTrue(response.Notifications.Count > 0);
         }
 
@@ -129,7 +131,7 @@ namespace ListaDeTarefas.Tests.Commands.Criar
             var request = new CriarUsuarioRequest(login: _login.Username.Trim(),
                                                   senha: senha.Trim(),
                                                   email: _email.Endereco.Trim());
-            var response = new CriarUsuarioHandler(_unitOfWork, _usuarioRepositorio).Handle(request).GetAwaiter().GetResult();
+            var response = new CriarUsuarioHandler(_unitOfWork, _usuarioRepositorio, _emailService).Handle(request).GetAwaiter().GetResult();
             Assert.IsTrue(response.Notifications.Count == 0);
         }
 
@@ -139,7 +141,7 @@ namespace ListaDeTarefas.Tests.Commands.Criar
             var request = new CriarUsuarioRequest(login: _login.Username.Trim(),
                                                   senha: _senha.Password.Trim(),
                                                   email: _email.Endereco.Trim());
-            var response = new CriarUsuarioHandler(_unitOfWork, _usuarioRepositorio).Handle(request).GetAwaiter().GetResult();
+            var response = new CriarUsuarioHandler(_unitOfWork, _usuarioRepositorio, _emailService).Handle(request).GetAwaiter().GetResult();
             Assert.IsTrue(response.Notifications.Count == 0);
         }
     }
