@@ -25,16 +25,18 @@ namespace ListaDeTarefas.Application.Usuarios.Commands.AlterarSenha.Handler
             request.Validar();
             if (!request.IsValid)
             {
-                return new AlterarSenhaResponse(statusCode: HttpStatusCode.BadRequest,
-                                                mensagem: "Requisição inválida. Por favor, valide os dados informados.",
-                                                notifications: request.Notifications);
+                return new AlterarSenhaResponse(StatusCode: HttpStatusCode.BadRequest,
+                                                Mensagem: "Requisição inválida. Por favor, valide os dados informados.",
+                                                Notifications: request.Notifications);
             }
             try
             {
                 var usuario = await _usuarioRepositorio.BuscarPorIdAsync(request.Id);
                 if (usuario is null)
                 {
-                    return new AlterarSenhaResponse(statusCode: HttpStatusCode.BadRequest, mensagem: $"Não foi encontrado usuário com Id {request.Id}", notifications: request.Notifications);
+                    return new AlterarSenhaResponse(StatusCode: HttpStatusCode.BadRequest, 
+                                                    Mensagem: $"Não foi encontrado usuário com Id {request.Id}", 
+                                                    Notifications: request.Notifications);
                 }
                 
                 usuario.AlterarSenha(new Senha(request.NovaSenha));
@@ -44,15 +46,15 @@ namespace ListaDeTarefas.Application.Usuarios.Commands.AlterarSenha.Handler
                 var senhaAlterada = await _usuarioRepositorio.AlterarSenha(usuario);
                 if (senhaAlterada == false)
                 {
-                    return new AlterarSenhaResponse(statusCode: HttpStatusCode.InternalServerError,
-                                                mensagem: $"Houve uma falha ao alterar senha do usuário {usuario.Email.Endereco}. Por favor, tente novamente mais tarde.",
-                                                notifications: request.Notifications);
+                    return new AlterarSenhaResponse(StatusCode: HttpStatusCode.InternalServerError, 
+                                                    Mensagem: $"Houve uma falha ao alterar senha do usuário {usuario.Email.Endereco}. Por favor, tente novamente mais tarde.", 
+                                                    Notifications: request.Notifications);
                 }
 
                 _unitOfWork.Commit();
-                return new AlterarSenhaResponse(statusCode: HttpStatusCode.OK,
-                                                mensagem: $"Senha alterada com sucesso!",
-                                                notifications: request.Notifications);
+                return new AlterarSenhaResponse(StatusCode: HttpStatusCode.OK, 
+                                                Mensagem: $"Senha alterada com sucesso!", 
+                                                Notifications: request.Notifications);
             }
             catch (Exception ex)
             {

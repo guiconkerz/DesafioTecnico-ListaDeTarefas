@@ -13,7 +13,6 @@ namespace ListaDeTarefas.Domain.Models
         public Login Login { get; private set; }
         public Senha Senha { get; private set; }
         public Email Email { get; private set; }
-
         public ICollection<Tarefa> Tarefas { get; private set; } = new List<Tarefa>();
 
         public void AlterarEmail(Email email)
@@ -23,6 +22,15 @@ namespace ListaDeTarefas.Domain.Models
                 AddNotification("Usuario.Email", "E-mail informado inválido.");
             }
             Email = email;
+        }
+
+        public void AlterarSenha(Senha senha, string codigo)
+        {
+            if (!string.Equals(codigo.Trim(), Senha.CodigoAlteracao.Trim(), StringComparison.CurrentCultureIgnoreCase))
+            {
+                AddNotification("Usuario.Senha.CodigoAlteracao", "Código de restauração inválido.");
+            }
+            Senha = senha;
         }
 
         public void AlterarSenha(Senha senha)

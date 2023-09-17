@@ -4,20 +4,8 @@ using System.Net;
 
 namespace ListaDeTarefas.Application.Usuarios.Commands.AlterarSenha.Response
 {
-    public sealed class AlterarSenhaResponse : IResponse
+    public sealed record AlterarSenhaResponse(HttpStatusCode StatusCode, string Mensagem, IReadOnlyCollection<Notification> Notifications) : IResponse
     {
-        public HttpStatusCode StatusCode { get; set; }
-        public string Mensagem { get; set; } = string.Empty;
-        public IReadOnlyCollection<Notification> Notifications { get; set; } = new List<Notification>();
-        public string Data { get => _data.ToString("dd/MM/yyyy HH:mm:ss"); }
-        private readonly DateTime _data;
-
-        public AlterarSenhaResponse(HttpStatusCode statusCode, string mensagem, IReadOnlyCollection<Notification> notifications)
-        {
-            StatusCode = statusCode;
-            Mensagem = mensagem;
-            Notifications = notifications;
-            _data = DateTime.Now;
-        }
+        public string Data { get => DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"); }
     }
 }

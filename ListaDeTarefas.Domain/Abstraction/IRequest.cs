@@ -2,7 +2,5 @@
 
 namespace ListaDeTarefas.Domain.Abstraction
 {
-    public interface IRequest : IValidate
-    {
-    }
+    public interface IRequest : IValidate { }
 }

@@ -26,12 +26,45 @@ namespace ListaDeTarefas.Infra.Data.Mappings
                .HasMaxLength(64)
                .IsRequired(true);
 
+            builder.OwnsOne(x => x.Senha)
+               .Property(x => x.CodigoAlteracao)
+               .HasColumnName("CodigoAlteracaoSenha")
+               .HasColumnType("varchar")
+               .HasMaxLength(8)
+               .IsRequired(true);
+
             builder.OwnsOne(x => x.Email)
                .Property(x => x.Endereco)
                .HasColumnName("Email")
                .HasColumnType("varchar")
                .HasMaxLength(60)
                .IsRequired(true);
+
+            builder.OwnsOne(x => x.Email)
+                .OwnsOne(x => x.VerificarEmail)
+                .Property(x => x.Codigo)
+                .HasColumnName("CodigoVerificacaoEmail")
+                .HasColumnType("varchar")
+                .HasMaxLength(6)
+                .IsRequired(true);
+
+            builder.OwnsOne(x => x.Email)
+                .OwnsOne(x => x.VerificarEmail)
+                .Property(x => x.DataExpiracao)
+                .HasColumnName("DataExpiracaoCodigoEmail")
+                .HasColumnType("datetime")
+                .IsRequired(false);
+
+            builder.OwnsOne(x => x.Email)
+                .OwnsOne(x => x.VerificarEmail)
+                .Property(x => x.DataVerificacao)
+                .HasColumnName("DataVerificacaoCodigoEmail")
+                .HasColumnType("datetime")
+                .IsRequired(false);
+
+            builder.OwnsOne(x => x.Email)
+                .OwnsOne(x => x.VerificarEmail)
+                .Ignore(x => x.Ativo);
 
             builder.HasMany(x => x.Tarefas)
                 .WithOne(x => x.Usuario)

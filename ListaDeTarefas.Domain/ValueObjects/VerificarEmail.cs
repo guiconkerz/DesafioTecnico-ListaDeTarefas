@@ -2,10 +2,11 @@
 
 namespace ListaDeTarefas.Domain.ValueObjects
 {
-    public sealed class VerificarEmail : ValueObject
+    public class VerificarEmail : ValueObject
     {
+        public VerificarEmail() { }
         public string Codigo { get; } = Guid.NewGuid().ToString(format: "N")[0..6].ToUpper();
-        public DateTime? DataExpiracao { get; private set; } = DateTime.UtcNow.AddMinutes(5);
+        public DateTime? DataExpiracao { get; private set; } = DateTime.Now.AddMinutes(5);
         public DateTime? DataVerificacao { get; private set; } = null;
         public bool Ativo => DataVerificacao != null && DataExpiracao == null;
 
@@ -15,7 +16,7 @@ namespace ListaDeTarefas.Domain.ValueObjects
             {
                 AddNotification("VerificacaoEmail.Codigo", "Este código já foi ativado.");
             }
-            if (DataExpiracao < DateTime.UtcNow)
+            if (DataExpiracao < DateTime.Now)
             {
                 AddNotification("VerificacaoEmail.Codigo", "Este código já expirou.");
             }
@@ -24,7 +25,7 @@ namespace ListaDeTarefas.Domain.ValueObjects
                 AddNotification("VerificacaoEmail.Codigo", "Código de verificação inválido.");
             }
             DataExpiracao = null;
-            DataVerificacao = DateTime.UtcNow;
+            DataVerificacao = DateTime.Now;
         }
     }
 }

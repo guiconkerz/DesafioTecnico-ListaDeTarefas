@@ -26,9 +26,9 @@ namespace ListaDeTarefas.Application.Usuarios.Commands.Criar.Handler
             request.Validar();
             if (!request.IsValid)
             {
-                return new CriarUsuarioResponse(statusCode: HttpStatusCode.BadRequest,
-                                            mensagem: "Falha na requisição para criar um usuário.",
-                                            notifications: request.Notifications);
+                return new CriarUsuarioResponse(StatusCode: HttpStatusCode.BadRequest,
+                                                Mensagem: "Falha na requisição para criar um usuário.",
+                                                Notifications: request.Notifications);
             }
 
             var usuario = new Usuario(
@@ -42,9 +42,9 @@ namespace ListaDeTarefas.Application.Usuarios.Commands.Criar.Handler
                 await _usuarioRepositorio.AdicionarAsync(usuario);
                 _unitOfWork.Commit();
 
-                return new CriarUsuarioResponse(statusCode: HttpStatusCode.OK,
-                                            mensagem: $"Usuario {request.Login} criado com sucesso!.",
-                                            notifications: request.Notifications);
+                return new CriarUsuarioResponse(StatusCode: HttpStatusCode.OK,
+                                                Mensagem: $"Usuario {request.Login} criado com sucesso!.",
+                                                Notifications: request.Notifications);
             }
             catch (Exception ex)
             {

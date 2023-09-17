@@ -27,9 +27,9 @@ namespace ListaDeTarefas.Application.Tarefas.Commands.Criar.Handler
             request.Validar();
             if (!request.IsValid)
             {
-                return new CriarTarefaResponse(statusCode: HttpStatusCode.BadRequest,
-                                            mensagem: "Falha na requisição para criar um usuário.",
-                                            notifications: request.Notifications);
+                return new CriarTarefaResponse(StatusCode: HttpStatusCode.BadRequest,
+                                            Mensagem: "Falha na requisição para criar um usuário.",
+                                            Notifications: request.Notifications);
             }
             
             
@@ -38,9 +38,9 @@ namespace ListaDeTarefas.Application.Tarefas.Commands.Criar.Handler
                 var usuarioDB = await _usuarioRepositorio.BuscarPorIdAsync(request.IdUsuario);
                 if (usuarioDB is null)
                 {
-                    return new CriarTarefaResponse(statusCode: HttpStatusCode.BadRequest,
-                                                mensagem: $"Usuário informado não foi encontrado.",
-                                                notifications: request.Notifications);
+                    return new CriarTarefaResponse(StatusCode: HttpStatusCode.BadRequest,
+                                                Mensagem: $"Usuário informado não foi encontrado.",
+                                                Notifications: request.Notifications);
                 }
 
                 var tarefa = new Tarefa(titulo: request.Titulo,
@@ -55,9 +55,9 @@ namespace ListaDeTarefas.Application.Tarefas.Commands.Criar.Handler
                 await _tarefaRepositorio.AdicionarAsync(tarefa);
                 _unitOfWork.Commit();
 
-                return new CriarTarefaResponse(statusCode: HttpStatusCode.OK,
-                                            mensagem: $"Tarefa {request.Titulo} criada com sucesso.",
-                                            notifications: request.Notifications);
+                return new CriarTarefaResponse(StatusCode: HttpStatusCode.OK,
+                                            Mensagem: $"Tarefa {request.Titulo} criada com sucesso.",
+                                            Notifications: request.Notifications);
             }
             catch (Exception ex)
             {

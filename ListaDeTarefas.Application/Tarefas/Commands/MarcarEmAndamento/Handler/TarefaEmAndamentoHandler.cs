@@ -23,9 +23,9 @@ namespace ListaDeTarefas.Application.Tarefas.Commands.MarcarEmAndamento.Handler
             request.Validar();
             if (!request.IsValid)
             {
-                return new TarefaEmAndamentoResponse(statusCode: HttpStatusCode.BadRequest,
-                                            mensagem: "Falha na requisição para criar um usuário.",
-                                            notifications: request.Notifications);
+                return new TarefaEmAndamentoResponse(StatusCode: HttpStatusCode.BadRequest,
+                                            Mensagem: "Falha na requisição para criar um usuário.",
+                                            Notifications: request.Notifications);
             }
             
             try
@@ -33,9 +33,9 @@ namespace ListaDeTarefas.Application.Tarefas.Commands.MarcarEmAndamento.Handler
                 var tarefa = await _tarefaRepositorio.ObterPorIdAsync(request.IdTarefa);
                 if (tarefa is null)
                 {
-                    return new TarefaEmAndamentoResponse(statusCode: HttpStatusCode.BadRequest,
-                                                mensagem: $"Tarefa informada não foi encontrada.",
-                                                notifications: request.Notifications);
+                    return new TarefaEmAndamentoResponse(StatusCode: HttpStatusCode.BadRequest,
+                                                Mensagem: $"Tarefa informada não foi encontrada.",
+                                                Notifications: request.Notifications);
                 }
 
                 tarefa.MarcarComoEmAndamento();
@@ -44,9 +44,9 @@ namespace ListaDeTarefas.Application.Tarefas.Commands.MarcarEmAndamento.Handler
                 await _tarefaRepositorio.AlterarStatus(tarefa);
                 _unitOfWork.Commit();
 
-                return new TarefaEmAndamentoResponse(statusCode: HttpStatusCode.OK,
-                                            mensagem: $"Status da tarefa {request.IdTarefa} alterado para Em Andamento.",
-                                            notifications: request.Notifications);
+                return new TarefaEmAndamentoResponse(StatusCode: HttpStatusCode.OK,
+                                            Mensagem: $"Status da tarefa {request.IdTarefa} alterado para Em Andamento.",
+                                            Notifications: request.Notifications);
             }
             catch (Exception ex)
             {

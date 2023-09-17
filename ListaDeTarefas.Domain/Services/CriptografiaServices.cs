@@ -1,4 +1,4 @@
-﻿namespace ListaDeTarefas.Domain.Services
+﻿namespace ListaDeTarefas.Infra.Services
 {
     public static class CriptografiaServices
     {

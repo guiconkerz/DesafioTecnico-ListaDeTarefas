@@ -1,6 +1,5 @@
 ﻿using ListaDeTarefas.Application.Interfaces.Tarefas;
 using ListaDeTarefas.Application.Interfaces.UnitOfWork;
-using ListaDeTarefas.Application.Tarefas.Commands.MarcarEmAndamento.Response;
 using ListaDeTarefas.Application.Tarefas.Commands.MarcarFinalizada.Request;
 using ListaDeTarefas.Application.Tarefas.Commands.MarcarFinalizada.Response;
 using ListaDeTarefas.Domain.Abstraction;
@@ -23,9 +22,9 @@ namespace ListaDeTarefas.Application.Tarefas.Commands.MarcarFinalizada.Handler
             request.Validar();
             if (!request.IsValid)
             {
-                return new FinalizarTarefaResponse(statusCode: HttpStatusCode.BadRequest,
-                                            mensagem: "Falha na requisição para criar um usuário.",
-                                            notifications: request.Notifications);
+                return new FinalizarTarefaResponse(StatusCode: HttpStatusCode.BadRequest,
+                                            Mensagem: "Falha na requisição para criar um usuário.",
+                                            Notifications: request.Notifications);
             }
 
             try
@@ -33,9 +32,9 @@ namespace ListaDeTarefas.Application.Tarefas.Commands.MarcarFinalizada.Handler
                 var tarefa = await _tarefaRepositorio.ObterPorIdAsync(request.IdTarefa);
                 if (tarefa is null)
                 {
-                    return new FinalizarTarefaResponse(statusCode: HttpStatusCode.BadRequest,
-                                                mensagem: $"Tarefa informada não foi encontrada.",
-                                                notifications: request.Notifications);
+                    return new FinalizarTarefaResponse(StatusCode: HttpStatusCode.BadRequest,
+                                                Mensagem: $"Tarefa informada não foi encontrada.",
+                                                Notifications: request.Notifications);
                 }
 
                 tarefa.MarcarComoFinalizada();
@@ -44,9 +43,9 @@ namespace ListaDeTarefas.Application.Tarefas.Commands.MarcarFinalizada.Handler
                 await _tarefaRepositorio.AlterarStatus(tarefa);
                 _unitOfWork.Commit();
 
-                return new FinalizarTarefaResponse(statusCode: HttpStatusCode.OK,
-                                            mensagem: $"Status da tarefa {request.IdTarefa} alterado para Finalizada.",
-                                            notifications: request.Notifications);
+                return new FinalizarTarefaResponse(StatusCode: HttpStatusCode.OK,
+                                            Mensagem: $"Status da tarefa {request.IdTarefa} alterado para Finalizada.",
+                                            Notifications: request.Notifications);
             }
             catch (Exception ex)
             {

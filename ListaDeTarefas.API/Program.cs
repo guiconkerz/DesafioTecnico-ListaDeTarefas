@@ -12,13 +12,38 @@ using ListaDeTarefas.Application.Usuarios.Commands.Excluir.Handler;
 using ListaDeTarefas.Infra.Data.Context;
 using ListaDeTarefas.Infra.Queries;
 using ListaDeTarefas.Infra.Repositories;
+using ListaDeTarefas.Infra.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
 AddServices(builder);
 AddRepositories(builder);
+
+builder.Services.AddTransient<TokenServices>();
+
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(x =>
+{
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(PrivateKey.Key)),
+        ValidateIssuer = false,
+        ValidateAudience = false,
+    };
+});
+builder.Services.AddAuthorization(x =>
+{
+    x.AddPolicy("Admin", p => p.RequireUserName("teste1"));
+});
+
+// Add services to the container.
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -36,6 +61,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
@@ -45,6 +71,10 @@ app.Run();
 static void AddServices(WebApplicationBuilder builder)
 {
     builder.Services.AddDbContext<TarefasDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Database")));
+
+    builder.Configuration.GetSection("Secrets").GetValue<string>("ApiKey");
+    builder.Configuration.GetSection("Secrets").GetValue<string>("JwtPrivateKey");
+    builder.Configuration.GetSection("Secrets").GetValue<string>("PasswordSaltKey");
 }
 
 static void AddRepositories(WebApplicationBuilder builder)

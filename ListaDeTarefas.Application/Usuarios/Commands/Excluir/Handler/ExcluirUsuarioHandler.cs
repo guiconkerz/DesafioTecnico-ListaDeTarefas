@@ -23,9 +23,9 @@ namespace ListaDeTarefas.Application.Usuarios.Commands.Excluir.Handler
             request.Validar();
             if (!request.IsValid)
             {
-                return new ExcluirUsuarioResponse(statusCode: HttpStatusCode.BadRequest,
-                                                  mensagem: "Falha na requisição para excluir um usuário.",
-                                                  request.Notifications);
+                return new ExcluirUsuarioResponse(StatusCode: HttpStatusCode.BadRequest,
+                                                  Mensagem: "Falha na requisição para excluir um usuário.",
+                                                  Notifications: request.Notifications);
             }
 
             try
@@ -34,15 +34,15 @@ namespace ListaDeTarefas.Application.Usuarios.Commands.Excluir.Handler
                 var removido = await _usuarioRepositorio.RemoverAsync(request.Id);
                 if (removido == false)
                 {
-                    return new ExcluirUsuarioResponse(statusCode: HttpStatusCode.BadRequest,
-                                                  mensagem: $"Nenhum usuário com Id {request.Id} cadastrado.",
-                                                  request.Notifications);
+                    return new ExcluirUsuarioResponse(StatusCode: HttpStatusCode.BadRequest, 
+                                                      Mensagem: $"Nenhum usuário com Id {request.Id} cadastrado.", 
+                                                      Notifications: request.Notifications);
                 }
                 _unitOfWork.Commit();
 
-                return new ExcluirUsuarioResponse(statusCode: HttpStatusCode.OK,
-                                                  mensagem: $"Usuario com Id {request.Id} excluído com sucesso.",
-                                                  request.Notifications);
+                return new ExcluirUsuarioResponse(StatusCode: HttpStatusCode.OK, 
+                                                  Mensagem: $"Usuario com Id {request.Id} excluído com sucesso.", 
+                                                  Notifications: request.Notifications);
             }
             catch (Exception ex)
             {
