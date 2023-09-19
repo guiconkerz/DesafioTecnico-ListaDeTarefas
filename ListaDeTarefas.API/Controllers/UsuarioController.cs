@@ -1,8 +1,10 @@
-﻿using ListaDeTarefas.Application.Interfaces.Usuarios;
+﻿using ListaDeTarefas.Application.Interfaces.Services;
+using ListaDeTarefas.Application.Interfaces.Usuarios;
 using ListaDeTarefas.Application.Interfaces.Usuarios.Handler;
 using ListaDeTarefas.Application.Usuarios.Commands.AlterarSenha.Request;
 using ListaDeTarefas.Application.Usuarios.Commands.Criar.Request;
 using ListaDeTarefas.Application.Usuarios.Commands.Excluir.Request;
+using ListaDeTarefas.Application.Usuarios.Commands.Login.Request;
 using ListaDeTarefas.Infra.Queries;
 using ListaDeTarefas.Infra.Services;
 using ListaDeTarefas.Infra.Services.Extensions;
@@ -138,11 +140,20 @@ namespace ListaDeTarefas.API.Controllers
             return Ok($"Bem vindo {claim}");
         }
 
-        [HttpGet]
-        [Route("/Secrets")]
-        public async Task<IActionResult> ObterSecrets()
+        [HttpPost]
+        [Route("/Autenticar")]
+        public async Task<IActionResult> Autenticar(
+            [FromBody] LogarRequest request,
+            [FromServices] ILogarHandler _handler)
         {
-            return Ok($"Bem vindo");
+            var response = await _handler.Handle(request);
+
+            if (response.StatusCode == HttpStatusCode.BadRequest)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
         }
 
     }

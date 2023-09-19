@@ -1,4 +1,5 @@
-﻿using ListaDeTarefas.Application.Interfaces.UnitOfWork;
+﻿using ListaDeTarefas.Application.Interfaces.Services;
+using ListaDeTarefas.Application.Interfaces.UnitOfWork;
 using ListaDeTarefas.Application.Interfaces.Usuarios;
 using ListaDeTarefas.Application.Interfaces.Usuarios.Handler;
 using ListaDeTarefas.Application.Usuarios.Commands.Criar.Response;
@@ -13,56 +14,69 @@ namespace ListaDeTarefas.Application.Usuarios.Commands.Login.Handler
     {
         private readonly IUsuarioRepositorio _usuarioRepositorio;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ITokenServices __tokenServices;
 
-        public LogarHandler(IUsuarioRepositorio usuarioRepositorio, IUnitOfWork unitOfWork)
+        public LogarHandler(IUsuarioRepositorio usuarioRepositorio, IUnitOfWork unitOfWork, ITokenServices tokenServices)
         {
             _usuarioRepositorio = usuarioRepositorio;
             _unitOfWork = unitOfWork;
+            __tokenServices = tokenServices;
         }
 
         public async Task<IResponse> Handle(LogarRequest request)
         {
+            #region Validação de entrada
             request.Validar();
             if (!request.IsValid)
             {
-                return new LogarResponse(StatusCode: HttpStatusCode.BadRequest,
-                                                Mensagem: "Falha na requisição de login.",
-                                                Notifications: request.Notifications);
+                return new LogarResponse(statusCode: HttpStatusCode.BadRequest,
+                                                mensagem: "Falha na requisição de login.",
+                                                notifications: request.Notifications);
             }
+            #endregion
 
             try
             {
+                #region Busca o usuário
                 var usuarioDB = await _usuarioRepositorio.BuscarPorEmailAsync(request.Email);
                 if (usuarioDB is null)
                 {
-                    return new LogarResponse(StatusCode: HttpStatusCode.BadRequest,
-                                                    Mensagem: "Perfil não encontrado.",
-                                                    Notifications: request.Notifications);
+                    return new LogarResponse(statusCode: HttpStatusCode.BadRequest,
+                                                    mensagem: "Usuário não encontrado.",
+                                                    notifications: request.Notifications);
                 }
+                #endregion
 
+                #region Valida senha
                 if (!usuarioDB.Senha.Verificar(request.Senha, usuarioDB.Senha.Password))
                 {
-                    return new LogarResponse(StatusCode: HttpStatusCode.BadRequest,
-                                                    Mensagem: "Usuário e/ou senha inválidos.",
-                                                    Notifications: request.Notifications);
+                    return new LogarResponse(statusCode: HttpStatusCode.BadRequest,
+                                                    mensagem: "Senha inválida.",
+                                                    notifications: request.Notifications);
                 }
+                #endregion
 
+                #region Verifica se a verificação da conta está ativa
                 if (!usuarioDB.Email.VerificarEmail.Ativo)
                 {
-                    return new LogarResponse(StatusCode: HttpStatusCode.BadRequest,
-                                                    Mensagem: "Conta inativa.",
-                                                    Notifications: request.Notifications);
+                    return new LogarResponse(statusCode: HttpStatusCode.BadRequest,
+                                                    mensagem: "Conta ainda não foi verificada. Por favor, verifique sua conta para ativa-la.",
+                                                    notifications: request.Notifications);
                 }
+                #endregion
 
-                return new LogarResponse(StatusCode: HttpStatusCode.OK,
-                                                    Mensagem: string.Empty,
-                                                    Notifications: request.Notifications)
-                                                    { 
-                                                        Id = usuarioDB.UsuarioId.ToString(),
-                                                        Email = usuarioDB.Email.Endereco,
-                                                        Login = usuarioDB.Login.Username,
-                                                        Perfil = Array.Empty<string>()
-                                                    };
+
+                #region Gera o token e response do usuário autenticado
+                var response = new LogarResponse(statusCode: HttpStatusCode.OK,
+                                                 mensagem: $"{usuarioDB.Login.Username} autenticado com sucesso!",
+                                                 id: usuarioDB.UsuarioId,
+                                                 login: usuarioDB.Login.Username,
+                                                 email: usuarioDB.Email.Endereco,
+                                                 perfil: usuarioDB.Perfil.Nome);
+                response.GerarToken(__tokenServices);
+                #endregion
+
+                return response;
             }
             catch (Exception ex)
             {

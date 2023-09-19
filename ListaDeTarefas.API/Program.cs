@@ -8,8 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServices();
 
-builder.Services.AddTransient<TokenServices>();
-
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

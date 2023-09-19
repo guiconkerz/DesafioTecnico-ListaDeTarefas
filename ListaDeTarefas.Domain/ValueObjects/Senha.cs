@@ -20,5 +20,10 @@ namespace ListaDeTarefas.Domain.ValueObjects
             return BCrypt.Net.BCrypt.Verify(senha, senhaCriptografada);
         }
 
+        public bool Verificar(string senha)
+        {
+            return BCrypt.Net.BCrypt.Verify(senha, Password);
+        }
+
     }
 }

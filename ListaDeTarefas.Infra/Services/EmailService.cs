@@ -21,11 +21,11 @@ namespace ListaDeTarefas.Infra.Services
 
         public async Task EnviarEmailVerificacao(Usuario usuario)
         {
-            var host = _configuration.GetSection("SMTP:Host").Value;
-            var nome = _configuration.GetSection(key: "SMTP:Nome").Value;
-            var username = _configuration.GetSection(key: "SMTP:UserName").Value;
-            var senha = _configuration.GetSection(key: "SMTP:Senha").Value;
-            var porta = Convert.ToInt32(_configuration.GetSection(key: "SMTP:Porta").Value);
+            var host = _configuration["SMTP:Host"];
+            var nome = _configuration[key: "SMTP:Nome"];
+            var username = _configuration[key: "SMTP:UserName"];
+            var senha = _configuration[key: "SMTP:Senha"];
+            var porta = Convert.ToInt32(_configuration[key: "SMTP:Porta"]);
 
             //Adiciona destino do email
             var mail = new MailMessage()

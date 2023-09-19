@@ -3,6 +3,7 @@ using ListaDeTarefas.Application.Interfaces.Usuarios;
 using ListaDeTarefas.Domain.Models;
 using ListaDeTarefas.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
+using SendGrid.Helpers.Mail;
 
 namespace ListaDeTarefas.Infra.Repositories
 {
@@ -83,9 +84,11 @@ namespace ListaDeTarefas.Infra.Repositories
             .Usuarios
             .AnyAsync(x => x.Email.Endereco == email);
 
-        public Task<Usuario> BuscarPorEmailAsync(string email)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<Usuario> BuscarPorEmailAsync(string email) =>
+            await _tarefasContext
+                  .Usuarios
+                  .AsNoTracking()
+                  .Include(x => x.Perfil)
+                  .FirstOrDefaultAsync(x => x.Email.Endereco == email);
     }
 }

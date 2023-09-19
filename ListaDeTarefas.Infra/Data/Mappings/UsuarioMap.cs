@@ -69,6 +69,11 @@ namespace ListaDeTarefas.Infra.Data.Mappings
             builder.HasMany(x => x.Tarefas)
                 .WithOne(x => x.Usuario)
                 .HasForeignKey(x => x.FkUsuario);
+
+            builder.HasOne(x => x.Perfil)
+                .WithOne()
+                .HasForeignKey<Usuario>(x => x.PerfilId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

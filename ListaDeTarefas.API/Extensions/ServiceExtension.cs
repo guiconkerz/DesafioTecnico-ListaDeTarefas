@@ -16,6 +16,7 @@ using ListaDeTarefas.Infra.Repositories;
 using ListaDeTarefas.Infra.Services;
 using Microsoft.EntityFrameworkCore;
 using ListaDeTarefas.Domain;
+using ListaDeTarefas.Application.Usuarios.Commands.Login.Handler;
 
 namespace ListaDeTarefas.API.Extensions
 {
@@ -32,25 +33,7 @@ namespace ListaDeTarefas.API.Extensions
             #region Services
 
             builder.Services.AddScoped<IEmailService, EmailService>();
-
-            #endregion
-
-            #region Keys
-
-            Configuration.Secrets.ApiKey =
-            builder.Configuration["Secrets:ApiKey"] ?? string.Empty;
-            Configuration.Secrets.JwtPrivateKey =
-                builder.Configuration["Secrets:JwtPrivateKey"] ?? string.Empty;
-            Configuration.Secrets.PasswordSaltKey = 
-                builder.Configuration["Secrets:PasswordSaltKey"] ?? string.Empty;
-
-            Configuration.SendGrid.ApiKey =
-                builder.Configuration["SendGrid:ApiKey"] ?? string.Empty;
-
-            Configuration.Email.DefaultFromName =
-                builder.Configuration["Email:DefaultFromName"] ?? string.Empty;
-            Configuration.Email.DefaultFromEmail =
-                builder.Configuration["Email:DefaultFromEmail"] ?? string.Empty;
+            builder.Services.AddScoped<ITokenServices, TokenServices>();
 
             #endregion
 
@@ -69,19 +52,23 @@ namespace ListaDeTarefas.API.Extensions
             #region Usuario
 
             builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
+
             builder.Services.AddScoped<ICriarUsuarioHandler, CriarUsuarioHandler>();
             builder.Services.AddScoped<IExcluirUsuarioHandler, ExcluirUsuarioHandler>();
             builder.Services.AddScoped<IAlterarSenhaHandler, AlterarSenhaHandler>();
-            builder.Services.AddScoped<ITarefasQueries, TarefasQueries>();
+            builder.Services.AddScoped<ILogarHandler, LogarHandler>();
 
             #endregion
 
             #region Tarefa
 
             builder.Services.AddScoped<ITarefasRepositorio, TarefasRepositorio>();
+
             builder.Services.AddScoped<ICriarTarefaHandler, CriarTarefaHandler>();
             builder.Services.AddScoped<ITarefaEmAndamentoHandler, TarefaEmAndamentoHandler>();
             builder.Services.AddScoped<IFinalizarTarefaHandler, FinalizarTarefaHandler>();
+
+            builder.Services.AddScoped<ITarefasQueries, TarefasQueries>();
 
             #endregion
 

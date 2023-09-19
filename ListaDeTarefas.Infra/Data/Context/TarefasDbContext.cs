@@ -12,6 +12,7 @@ namespace ListaDeTarefas.Infra.Data.Context
 
         public DbSet<Tarefa> Tarefas { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Perfil> Perfis { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -20,6 +21,7 @@ namespace ListaDeTarefas.Infra.Data.Context
 
             modelBuilder.ApplyConfiguration(new TarefaMap());
             modelBuilder.ApplyConfiguration(new UsuarioMap());
+            modelBuilder.ApplyConfiguration(new PerfilMap());
 
             base.OnModelCreating(modelBuilder);
         }

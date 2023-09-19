@@ -14,6 +14,8 @@ namespace ListaDeTarefas.Domain.Models
         public Senha Senha { get; private set; }
         public Email Email { get; private set; }
         public ICollection<Tarefa> Tarefas { get; private set; } = new List<Tarefa>();
+        public int PerfilId { get; private set; }
+        public Perfil Perfil { get; private set; }
 
         public void AlterarEmail(Email email)
         {
