@@ -3,7 +3,7 @@ using ListaDeTarefas.Application.Interfaces.Usuarios;
 using ListaDeTarefas.Application.Interfaces.Usuarios.Handler;
 using ListaDeTarefas.Application.Usuarios.Commands.Excluir.Request;
 using ListaDeTarefas.Application.Usuarios.Commands.Excluir.Response;
-using ListaDeTarefas.Domain.Abstraction;
+using ListaDeTarefas.Shared.Interfaces;
 using System.Net;
 
 namespace ListaDeTarefas.Application.Usuarios.Commands.Excluir.Handler

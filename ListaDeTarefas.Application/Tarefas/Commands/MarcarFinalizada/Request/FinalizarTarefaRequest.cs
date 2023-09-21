@@ -1,6 +1,6 @@
 ﻿using Flunt.Notifications;
 using Flunt.Validations;
-using ListaDeTarefas.Domain.Abstraction;
+using ListaDeTarefas.Shared.Interfaces;
 
 namespace ListaDeTarefas.Application.Tarefas.Commands.MarcarFinalizada.Request
 {

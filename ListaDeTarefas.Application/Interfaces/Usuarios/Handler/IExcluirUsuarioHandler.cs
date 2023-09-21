@@ -1,5 +1,5 @@
 ﻿using ListaDeTarefas.Application.Usuarios.Commands.Excluir.Request;
-using ListaDeTarefas.Domain.Abstraction;
+using ListaDeTarefas.Shared.Interfaces;
 
 namespace ListaDeTarefas.Application.Interfaces.Usuarios.Handler
 {

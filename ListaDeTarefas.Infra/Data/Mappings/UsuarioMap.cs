@@ -31,7 +31,22 @@ namespace ListaDeTarefas.Infra.Data.Mappings
                .HasColumnName("CodigoAlteracaoSenha")
                .HasColumnType("varchar")
                .HasMaxLength(8)
-               .IsRequired(true);
+               .IsRequired(false);
+
+            builder.OwnsOne(x => x.Senha)
+                .Property(x => x.DataExpiracao)
+                .HasColumnName("DataExpiracaoCodigoSenha")
+                .HasColumnType("datetime")
+                .IsRequired(false);
+
+            builder.OwnsOne(x => x.Senha)
+               .Property(x => x.DataVerificacao)
+               .HasColumnName("DataVerificacaoCodigoSenha")
+               .HasColumnType("datetime")
+               .IsRequired(false);
+
+            builder.OwnsOne(x => x.Senha)
+              .Ignore(x => x.Ativo);
 
             builder.OwnsOne(x => x.Email)
                .Property(x => x.Endereco)
@@ -46,7 +61,7 @@ namespace ListaDeTarefas.Infra.Data.Mappings
                 .HasColumnName("CodigoVerificacaoEmail")
                 .HasColumnType("varchar")
                 .HasMaxLength(6)
-                .IsRequired(true);
+                .IsRequired(false);
 
             builder.OwnsOne(x => x.Email)
                 .OwnsOne(x => x.VerificarEmail)

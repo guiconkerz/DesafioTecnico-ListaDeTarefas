@@ -2,9 +2,11 @@
 using ListaDeTarefas.Application.Interfaces.Usuarios;
 using ListaDeTarefas.Application.Interfaces.Usuarios.Handler;
 using ListaDeTarefas.Application.Usuarios.Commands.AlterarSenha.Request;
+using ListaDeTarefas.Application.Usuarios.Commands.AtivarConta.Request;
 using ListaDeTarefas.Application.Usuarios.Commands.Criar.Request;
 using ListaDeTarefas.Application.Usuarios.Commands.Excluir.Request;
 using ListaDeTarefas.Application.Usuarios.Commands.Login.Request;
+using ListaDeTarefas.Application.Usuarios.Commands.SolicitarAlteracaoSenha.Request;
 using ListaDeTarefas.Infra.Queries;
 using ListaDeTarefas.Infra.Services;
 using ListaDeTarefas.Infra.Services.Extensions;
@@ -60,6 +62,7 @@ namespace ListaDeTarefas.API.Controllers
             return Ok(tarefas);
         }
 
+
         [HttpPost]
         [Route("/CriarUsuario")]
         public async Task<IActionResult> Criar(
@@ -74,18 +77,21 @@ namespace ListaDeTarefas.API.Controllers
             return Ok(response);
         }
 
-        [HttpDelete]
-        [Route("/{id}")]
-        public async Task<IActionResult> Excluir(
-            [FromServices] IExcluirUsuarioHandler _handler,
-            [FromRoute] int id)
+        [HttpPut]
+        [Route("/SolicitarCódigoAlteracaoSenha")]
+        public async Task<IActionResult> SolicitarCódigoAlteracaoSenha(
+            [FromBody] SolicitarAlteracaoSenhaRequest request,
+            [FromServices] ISolicitarAlteracaoSenhaHandler _handler)
         {
-            var request = new ExcluirUsuarioRequest(id);
             var response = await _handler.Handle(request);
 
-            if (response.StatusCode is HttpStatusCode.BadRequest)
+            if (response.StatusCode == HttpStatusCode.BadRequest)
             {
                 return BadRequest(response);
+            }
+            if (response.StatusCode == HttpStatusCode.InternalServerError)
+            {
+                return StatusCode(500, response);
             }
             return Ok(response);
         }
@@ -109,42 +115,11 @@ namespace ListaDeTarefas.API.Controllers
             return Ok(response);
         }
 
-        [HttpGet]
-        [Route("/GerarToken/{idUsuario}")]
-        public async Task<IActionResult> CriarToken(
-            [FromServices] TokenServices services,
-            [FromServices] IUsuarioRepositorio usuarioRepositorio,
-            [FromRoute] int idUsuario)
-        {
-            var usuario = await usuarioRepositorio.BuscarPorIdAsync(idUsuario);
-            if (usuario == null) return NotFound($"Usuário informado não encontrado.");
-            var token = services.Criar(usuario);
-            
-            return Ok(token);
-        }
-
-        [Authorize]
-        [HttpGet]
-        [Route("/Restrito")]
-        public async  Task<IActionResult> Restrito()
-        {
-            return Ok($"Bem vindo {User.Login()}, você está Autorizado!");
-        }
-
-        [Authorize("Admin")]
-        [HttpGet]
-        [Route("/Admin")]
-        public async Task<IActionResult> Admin()
-        {
-            var claim = User.Identity.Name;
-            return Ok($"Bem vindo {claim}");
-        }
-
-        [HttpPost]
-        [Route("/Autenticar")]
-        public async Task<IActionResult> Autenticar(
-            [FromBody] LogarRequest request,
-            [FromServices] ILogarHandler _handler)
+        [HttpPut]
+        [Route("/AtivarConta")]
+        public async Task<IActionResult> AtivarConta(
+            [FromBody] AtivarContaRequest request,
+            [FromServices] IAtivarContaHandler _handler)
         {
             var response = await _handler.Handle(request);
 
@@ -152,9 +127,30 @@ namespace ListaDeTarefas.API.Controllers
             {
                 return BadRequest(response);
             }
-
+            if (response.StatusCode == HttpStatusCode.InternalServerError)
+            {
+                return StatusCode(500, response);
+            }
             return Ok(response);
         }
+
+        [HttpDelete]
+        [Route("/{id}")]
+        public async Task<IActionResult> Excluir(
+            [FromServices] IExcluirUsuarioHandler _handler,
+            [FromRoute] int id)
+        {
+            var request = new ExcluirUsuarioRequest(id);
+            var response = await _handler.Handle(request);
+
+            if (response.StatusCode is HttpStatusCode.BadRequest)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
+       
 
     }
 }

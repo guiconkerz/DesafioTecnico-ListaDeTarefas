@@ -1,12 +1,13 @@
-﻿using ListaDeTarefas.Application.Interfaces.Services;
+﻿using ListaDeTarefas.Application.Interfaces.Perfis;
+using ListaDeTarefas.Application.Interfaces.Services;
 using ListaDeTarefas.Application.Interfaces.UnitOfWork;
 using ListaDeTarefas.Application.Interfaces.Usuarios;
 using ListaDeTarefas.Application.Interfaces.Usuarios.Handler;
 using ListaDeTarefas.Application.Usuarios.Commands.Criar.Request;
 using ListaDeTarefas.Application.Usuarios.Commands.Criar.Response;
-using ListaDeTarefas.Domain.Abstraction;
 using ListaDeTarefas.Domain.Models;
 using ListaDeTarefas.Domain.ValueObjects;
+using ListaDeTarefas.Shared.Interfaces;
 using System.Net;
 
 namespace ListaDeTarefas.Application.Usuarios.Commands.Criar.Handler
@@ -15,31 +16,34 @@ namespace ListaDeTarefas.Application.Usuarios.Commands.Criar.Handler
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUsuarioRepositorio _usuarioRepositorio;
-        private readonly IEmailService _emailService;
+        private readonly IPerfilRepositorio _perfilRepositorio;
+        private readonly IEmailServices _emailService;
 
-        public CriarUsuarioHandler(IUnitOfWork unitOfWork, IUsuarioRepositorio usuarioRepositorio, IEmailService emailService)
+        public CriarUsuarioHandler(IUnitOfWork unitOfWork, IUsuarioRepositorio usuarioRepositorio, IEmailServices emailService, IPerfilRepositorio perfilRepositorio)
         {
             _unitOfWork = unitOfWork;
             _usuarioRepositorio = usuarioRepositorio;
             _emailService = emailService;
+            _perfilRepositorio = perfilRepositorio;
         }
 
         public async Task<IResponse> Handle(CriarUsuarioRequest request)
         {
+            #region Validações
             request.Validar();
             if (!request.IsValid)
             {
                 return new CriarUsuarioResponse(StatusCode: HttpStatusCode.BadRequest,
-                                                Mensagem: "Falha na requisição para criar um usuário.",
+                                                Mensagem: "Requisição inválida. Por favor, valide os dados informados.",
                                                 Notifications: request.Notifications);
             }
+            #endregion
 
             try
             {
-                _unitOfWork.BeginTransaction();
+                #region Verificar se E-mail está cadastrado
 
                 var emailCadastrado = await _usuarioRepositorio.EmailCadastrado(request.Email);
-
                 if (emailCadastrado)
                 {
                     return new CriarUsuarioResponse(StatusCode: HttpStatusCode.BadRequest,
@@ -47,10 +51,29 @@ namespace ListaDeTarefas.Application.Usuarios.Commands.Criar.Handler
                                                 Notifications: request.Notifications);
                 }
 
+                #endregion
+
+                #region Verifica o perfil informado
+
+                var perfil = await _perfilRepositorio.ObterPorNomeAsync(request.Perfil);
+                if (perfil is null)
+                {
+                    return new CriarUsuarioResponse(StatusCode: HttpStatusCode.BadRequest,
+                                                    Mensagem: $"O Perfil informado não existe no sistema.",
+                                                    Notifications: request.Notifications);
+                }
+
+                #endregion
+
+                #region Adiciona um usuário 
+
                 var usuario = new Usuario(
                                     login: new Domain.ValueObjects.Login(username: request.Login),
                                     senha: new Senha(senha: request.Senha),
-                                    email: new Email(request.Email));
+                                    email: new Email(request.Email),
+                                    perfil: perfil);
+
+                _unitOfWork.BeginTransaction();
 
                 await _usuarioRepositorio.AdicionarAsync(usuario);
                 await _emailService.EnviarEmailVerificacao(usuario);
@@ -60,6 +83,8 @@ namespace ListaDeTarefas.Application.Usuarios.Commands.Criar.Handler
                 return new CriarUsuarioResponse(StatusCode: HttpStatusCode.OK,
                                                 Mensagem: $"Usuario {request.Login} criado com sucesso!.",
                                                 Notifications: request.Notifications);
+
+                #endregion
             }
             catch (Exception ex)
             {

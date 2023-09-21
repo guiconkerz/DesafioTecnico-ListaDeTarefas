@@ -1,22 +1,24 @@
-﻿using ListaDeTarefas.Application.Interfaces.RepositoryBase;
+﻿using ListaDeTarefas.Application.Interfaces.Perfis;
+using ListaDeTarefas.Application.Interfaces.RepositoryBase;
 using ListaDeTarefas.Application.Interfaces.Services;
 using ListaDeTarefas.Application.Interfaces.Tarefas;
 using ListaDeTarefas.Application.Interfaces.UnitOfWork;
-using ListaDeTarefas.Application.Interfaces.Usuarios.Handler;
 using ListaDeTarefas.Application.Interfaces.Usuarios;
+using ListaDeTarefas.Application.Interfaces.Usuarios.Handler;
 using ListaDeTarefas.Application.Tarefas.Commands.Criar.Handler;
 using ListaDeTarefas.Application.Tarefas.Commands.MarcarEmAndamento.Handler;
 using ListaDeTarefas.Application.Tarefas.Commands.MarcarFinalizada.Handler;
 using ListaDeTarefas.Application.Usuarios.Commands.AlterarSenha.Handler;
+using ListaDeTarefas.Application.Usuarios.Commands.AtivarConta.Handler;
 using ListaDeTarefas.Application.Usuarios.Commands.Criar.Handler;
 using ListaDeTarefas.Application.Usuarios.Commands.Excluir.Handler;
+using ListaDeTarefas.Application.Usuarios.Commands.Login.Handler;
+using ListaDeTarefas.Application.Usuarios.Commands.SolicitarAlteracaoSenha.Handler;
 using ListaDeTarefas.Infra.Data.Context;
 using ListaDeTarefas.Infra.Queries;
 using ListaDeTarefas.Infra.Repositories;
 using ListaDeTarefas.Infra.Services;
 using Microsoft.EntityFrameworkCore;
-using ListaDeTarefas.Domain;
-using ListaDeTarefas.Application.Usuarios.Commands.Login.Handler;
 
 namespace ListaDeTarefas.API.Extensions
 {
@@ -32,7 +34,7 @@ namespace ListaDeTarefas.API.Extensions
 
             #region Services
 
-            builder.Services.AddScoped<IEmailService, EmailService>();
+            builder.Services.AddScoped<IEmailServices, EmailServices>();
             builder.Services.AddScoped<ITokenServices, TokenServices>();
 
             #endregion
@@ -57,6 +59,8 @@ namespace ListaDeTarefas.API.Extensions
             builder.Services.AddScoped<IExcluirUsuarioHandler, ExcluirUsuarioHandler>();
             builder.Services.AddScoped<IAlterarSenhaHandler, AlterarSenhaHandler>();
             builder.Services.AddScoped<ILogarHandler, LogarHandler>();
+            builder.Services.AddScoped<IAtivarContaHandler, AtivarContaHandler>();
+            builder.Services.AddScoped<ISolicitarAlteracaoSenhaHandler, SolicitarAlteracaoSenhaHandler>();
 
             #endregion
 
@@ -70,6 +74,10 @@ namespace ListaDeTarefas.API.Extensions
 
             builder.Services.AddScoped<ITarefasQueries, TarefasQueries>();
 
+            #endregion
+
+            #region Perfil
+            builder.Services.AddScoped<IPerfilRepositorio, PerfilRepositorio>();
             #endregion
 
         }

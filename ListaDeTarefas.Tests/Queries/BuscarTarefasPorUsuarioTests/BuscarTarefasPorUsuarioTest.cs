@@ -11,6 +11,8 @@ namespace ListaDeTarefas.Tests.Queries.BuscarTarefasPorUsuarioTests
         private Login _login;
         private Senha _senha;
         private Email _email;
+        private Perfil _perfil;
+
         private Usuario _usuario;
         private Usuario _usuario1;
         private Usuario _usuario2;
@@ -36,13 +38,19 @@ namespace ListaDeTarefas.Tests.Queries.BuscarTarefasPorUsuarioTests
             var email3 = new Email("email@email.com");
             var email4 = new Email("email@email.com");
 
+            _perfil = new Perfil("Administrador");
+            var perfil1 = new Perfil("Administrador");
+            var perfil2 = new Perfil("Administrador");
+            var perfil3 = new Perfil("Administrador");
+            var perfil4 = new Perfil("Administrador");
 
-            _usuario = new Usuario(_login, _senha, _email);
 
-            _usuario1 = new Usuario(_login1, senha1, email1);
-            _usuario2 = new Usuario(_login2, senha2, email2);
-            _usuario3 = new Usuario(_login3, senha3, email3);
-            _usuario4 = new Usuario(_login4, senha4, email4);
+            _usuario = new Usuario(_login, _senha, _email, _perfil);
+
+            _usuario1 = new Usuario(_login1, senha1, email1, perfil1);
+            _usuario2 = new Usuario(_login2, senha2, email2, perfil2);
+            _usuario3 = new Usuario(_login3, senha3, email3, perfil3);
+            _usuario4 = new Usuario(_login4, senha4, email4, perfil4);
 
             _tarefas = new List<Tarefa>
             {

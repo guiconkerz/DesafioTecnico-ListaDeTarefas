@@ -3,8 +3,8 @@ using ListaDeTarefas.Application.Interfaces.UnitOfWork;
 using ListaDeTarefas.Application.Interfaces.Usuarios;
 using ListaDeTarefas.Application.Tarefas.Commands.Criar.Request;
 using ListaDeTarefas.Application.Tarefas.Commands.Criar.Response;
-using ListaDeTarefas.Domain.Abstraction;
 using ListaDeTarefas.Domain.Models;
+using ListaDeTarefas.Shared.Interfaces;
 using System.Net;
 
 namespace ListaDeTarefas.Application.Tarefas.Commands.Criar.Handler

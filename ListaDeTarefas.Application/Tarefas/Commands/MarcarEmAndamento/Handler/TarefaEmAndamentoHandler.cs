@@ -2,7 +2,7 @@
 using ListaDeTarefas.Application.Interfaces.UnitOfWork;
 using ListaDeTarefas.Application.Tarefas.Commands.MarcarEmAndamento.Request;
 using ListaDeTarefas.Application.Tarefas.Commands.MarcarEmAndamento.Response;
-using ListaDeTarefas.Domain.Abstraction;
+using ListaDeTarefas.Shared.Interfaces;
 using System.Net;
 
 namespace ListaDeTarefas.Application.Tarefas.Commands.MarcarEmAndamento.Handler

@@ -1,5 +1,5 @@
 ﻿using Flunt.Notifications;
-using ListaDeTarefas.Domain.Abstraction;
+using ListaDeTarefas.Shared.Interfaces;
 using System.Net;
 
 namespace ListaDeTarefas.Application.Tarefas.Commands.Criar.Response

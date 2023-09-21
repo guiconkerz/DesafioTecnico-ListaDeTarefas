@@ -1,6 +1,4 @@
-﻿using ListaDeTarefas.Shared.Interfaces;
-
-namespace ListaDeTarefas.Domain.Abstraction
+﻿namespace ListaDeTarefas.Shared.Interfaces
 {
     public interface IRequest : IValidate { }
 }

@@ -87,15 +87,13 @@ namespace ListaDeTarefas.Infra.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UsuarioId"));
 
-                    b.Property<int>("FkPerfil")
-                        .HasColumnType("int");
-
                     b.Property<int>("PerfilId")
                         .HasColumnType("int");
 
                     b.HasKey("UsuarioId");
 
-                    b.HasIndex("PerfilId");
+                    b.HasIndex("PerfilId")
+                        .IsUnique();
 
                     b.ToTable("Usuario", (string)null);
                 });
@@ -114,9 +112,9 @@ namespace ListaDeTarefas.Infra.Migrations
             modelBuilder.Entity("ListaDeTarefas.Domain.Models.Usuario", b =>
                 {
                     b.HasOne("ListaDeTarefas.Domain.Models.Perfil", "Perfil")
-                        .WithMany()
-                        .HasForeignKey("PerfilId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithOne()
+                        .HasForeignKey("ListaDeTarefas.Domain.Models.Usuario", "PerfilId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.OwnsOne("ListaDeTarefas.Domain.ValueObjects.Email", "Email", b1 =>
@@ -197,6 +195,16 @@ namespace ListaDeTarefas.Infra.Migrations
                                 .HasMaxLength(8)
                                 .HasColumnType("varchar")
                                 .HasColumnName("CodigoAlteracaoSenha");
+
+                            b1.Property<DateTime?>("DataExpiracao")
+                                .IsRequired()
+                                .HasColumnType("datetime")
+                                .HasColumnName("DataExpiracaoCodigoSenha");
+
+                            b1.Property<DateTime?>("DataVerificacao")
+                                .IsRequired()
+                                .HasColumnType("datetime")
+                                .HasColumnName("DataVerificacaoCodigoSenha");
 
                             b1.Property<string>("Password")
                                 .IsRequired()

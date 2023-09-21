@@ -2,10 +2,9 @@
 using ListaDeTarefas.Application.Interfaces.UnitOfWork;
 using ListaDeTarefas.Application.Interfaces.Usuarios;
 using ListaDeTarefas.Application.Interfaces.Usuarios.Handler;
-using ListaDeTarefas.Application.Usuarios.Commands.Criar.Response;
 using ListaDeTarefas.Application.Usuarios.Commands.Login.Request;
 using ListaDeTarefas.Application.Usuarios.Commands.Login.Response;
-using ListaDeTarefas.Domain.Abstraction;
+using ListaDeTarefas.Shared.Interfaces;
 using System.Net;
 
 namespace ListaDeTarefas.Application.Usuarios.Commands.Login.Handler
@@ -69,11 +68,15 @@ namespace ListaDeTarefas.Application.Usuarios.Commands.Login.Handler
                 #region Gera o token e response do usuário autenticado
                 var response = new LogarResponse(statusCode: HttpStatusCode.OK,
                                                  mensagem: $"{usuarioDB.Login.Username} autenticado com sucesso!",
-                                                 id: usuarioDB.UsuarioId,
+                                                 id: usuarioDB.Id.ToString(),
                                                  login: usuarioDB.Login.Username,
                                                  email: usuarioDB.Email.Endereco,
                                                  perfil: usuarioDB.Perfil.Nome);
-                response.GerarToken(__tokenServices);
+
+                response.Token = __tokenServices.GerarToken(response);
+                response.RefreshToken = __tokenServices.GerarRefreshToken();
+                __tokenServices.SalvarRefreshToken(response.Email, response.RefreshToken);
+
                 #endregion
 
                 return response;

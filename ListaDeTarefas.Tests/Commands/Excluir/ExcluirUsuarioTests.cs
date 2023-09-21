@@ -1,19 +1,7 @@
-﻿using Azure;
-using ListaDeTarefas.Application.Interfaces.UnitOfWork;
+﻿using ListaDeTarefas.Application.Interfaces.UnitOfWork;
 using ListaDeTarefas.Application.Interfaces.Usuarios;
-using ListaDeTarefas.Application.Usuarios.Commands.Excluir.Handler;
 using ListaDeTarefas.Application.Usuarios.Commands.Excluir.Request;
-using ListaDeTarefas.Domain.Abstraction;
-using ListaDeTarefas.Domain.Models;
-using ListaDeTarefas.Domain.ValueObjects;
-using ListaDeTarefas.Infra.Repositories;
 using ListaDeTarefas.Tests.FakeRepository;
-using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ListaDeTarefas.Tests.Commands.Excluir
 {

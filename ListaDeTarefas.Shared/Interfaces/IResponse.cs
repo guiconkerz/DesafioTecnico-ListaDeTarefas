@@ -6,7 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ListaDeTarefas.Domain.Abstraction
+namespace ListaDeTarefas.Shared.Interfaces
 {
     public interface IResponse
     {

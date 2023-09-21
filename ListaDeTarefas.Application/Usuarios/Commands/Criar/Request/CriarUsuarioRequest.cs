@@ -1,21 +1,23 @@
 ﻿using Flunt.Notifications;
 using Flunt.Validations;
-using ListaDeTarefas.Domain.Abstraction;
+using ListaDeTarefas.Shared.Interfaces;
 
 namespace ListaDeTarefas.Application.Usuarios.Commands.Criar.Request
 {
     public sealed class CriarUsuarioRequest : Notifiable<Notification>, IRequest
     {
-        public CriarUsuarioRequest(string login, string senha, string email)
+        public CriarUsuarioRequest(string login, string email, string senha, string perfil)
         {
             Login = login;
-            Senha = senha;
             Email = email;
+            Senha = senha;
+            Perfil = perfil;
         }
 
         public string Login { get; private set; }
         public string Senha { get; private set; }
         public string Email { get; private set; }
+        public string Perfil { get; set; }
 
         public void Validar()
         {

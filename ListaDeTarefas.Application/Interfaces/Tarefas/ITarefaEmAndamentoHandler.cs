@@ -1,5 +1,5 @@
 ﻿using ListaDeTarefas.Application.Tarefas.Commands.MarcarEmAndamento.Request;
-using ListaDeTarefas.Domain.Abstraction;
+using ListaDeTarefas.Shared.Interfaces;
 
 namespace ListaDeTarefas.Application.Interfaces.Tarefas
 {

@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace PesquisaSatisfacao.API.Extensions
+namespace ListaDeTarefas.API.Extensions
 {
     public static class ClaimsPrincipalExtension
     {

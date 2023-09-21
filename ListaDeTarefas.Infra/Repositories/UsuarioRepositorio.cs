@@ -3,7 +3,6 @@ using ListaDeTarefas.Application.Interfaces.Usuarios;
 using ListaDeTarefas.Domain.Models;
 using ListaDeTarefas.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
-using SendGrid.Helpers.Mail;
 
 namespace ListaDeTarefas.Infra.Repositories
 {
@@ -11,6 +10,8 @@ namespace ListaDeTarefas.Infra.Repositories
     {
         public readonly TarefasDbContext _tarefasContext;
         public readonly IRepositorioBase<Usuario> _repositorioBase;
+        private readonly DateTime? __dataNula = null;
+        private readonly string? __codNulo = null;
 
         public UsuarioRepositorio(TarefasDbContext tarefasContext, IRepositorioBase<Usuario> repositorioBase)
         {
@@ -40,11 +41,15 @@ namespace ListaDeTarefas.Infra.Repositories
 
         public async Task<bool> AlterarSenha(Usuario usuario)
         {
-            var alterado = _tarefasContext
+            DateTime? dataNula = null;
+            var alterado = await _tarefasContext
                             .Usuarios
                             .Where(x => x.UsuarioId == usuario.UsuarioId)
-                            .ExecuteUpdate(x =>
-                                x.SetProperty(x => x.Senha.Password, usuario.Senha.Password));
+                            .ExecuteUpdateAsync(x =>
+                                x.SetProperty(x => x.Senha.Password, usuario.Senha.Password)
+                                .SetProperty(x => x.Senha.DataExpiracao, dataNula)
+                                .SetProperty(x => x.Senha.DataVerificacao, DateTime.Now)
+                                .SetProperty(x => x.Senha.CodigoAlteracao, __codNulo));
 
             if (alterado == 0)
             {
@@ -82,13 +87,47 @@ namespace ListaDeTarefas.Infra.Repositories
         public async Task<bool> EmailCadastrado(string email) =>
             await _tarefasContext
             .Usuarios
+            .AsNoTracking()
             .AnyAsync(x => x.Email.Endereco == email);
 
         public async Task<Usuario> BuscarPorEmailAsync(string email) =>
             await _tarefasContext
                   .Usuarios
-                  .AsNoTracking()
                   .Include(x => x.Perfil)
-                  .FirstOrDefaultAsync(x => x.Email.Endereco == email);
+                  .Where(x => x.Email.Endereco == email)
+                  .FirstOrDefaultAsync();
+
+        public async Task<bool> AtivarConta(Usuario usuario)
+        {
+            
+            var ativado = await _tarefasContext
+                  .Usuarios
+                  .Where(x => x.Email.Endereco == usuario.Email.Endereco && x.Email.VerificarEmail.Codigo == usuario.Email.VerificarEmail.Codigo)
+                  .ExecuteUpdateAsync(x =>
+                    x.SetProperty(x => x.Email.VerificarEmail.DataExpiracao, __dataNula)
+                     .SetProperty(x => x.Email.VerificarEmail.DataVerificacao, DateTime.Now)
+                     .SetProperty(x => x.Email.VerificarEmail.Codigo, __codNulo));
+
+            if (ativado == 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public async Task<bool> CadastrarCodigoAlteracaoSenha(Usuario usuario)
+        {
+            var alterado = await _tarefasContext
+                                .Usuarios
+                                .Where(x => x.UsuarioId == usuario.UsuarioId)
+                                .ExecuteUpdateAsync(x => x.SetProperty(x => x.Senha.CodigoAlteracao, usuario.Senha.CodigoAlteracao));
+
+            if (alterado == 0)
+            {
+                return false;
+            }
+            return true;
+        }
+            
     }
 }
