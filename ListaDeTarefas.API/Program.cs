@@ -16,14 +16,14 @@ builder.Services.AddAuthentication(x =>
 {
     x.TokenValidationParameters = new TokenValidationParameters
     {
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(PrivateKey.Key)),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Secrets:JwtPrivateKey"])),
         ValidateIssuer = false,
         ValidateAudience = false,
     };
 });
 builder.Services.AddAuthorization(x =>
 {
-    x.AddPolicy("Admin", p => p.RequireUserName("teste1"));
+    x.AddPolicy("Administrador", p => p.RequireRole("Administrador"));
 });
 
 // Add services to the container.

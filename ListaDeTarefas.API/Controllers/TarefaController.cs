@@ -3,11 +3,13 @@ using ListaDeTarefas.Application.Tarefas.Commands.Criar.Request;
 using ListaDeTarefas.Application.Tarefas.Commands.MarcarEmAndamento.Request;
 using ListaDeTarefas.Application.Tarefas.Commands.MarcarFinalizada.Request;
 using ListaDeTarefas.Infra.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace ListaDeTarefas.API.Controllers
 {
+    [Authorize("Administrador")]
     [Route("api/[controller]")]
     [ApiController]
     public class TarefaController : ControllerBase
@@ -64,7 +66,6 @@ namespace ListaDeTarefas.API.Controllers
             }
             return Ok(tarefa);
         }
-
 
         [HttpPost]
         [Route("/CriarTarefa")]

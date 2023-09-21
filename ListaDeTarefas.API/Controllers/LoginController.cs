@@ -1,6 +1,7 @@
 ﻿using ListaDeTarefas.Application.Interfaces.Services;
 using ListaDeTarefas.Application.Interfaces.Usuarios;
 using ListaDeTarefas.Application.Interfaces.Usuarios.Handler;
+using ListaDeTarefas.Application.Usuarios.Commands.Criar.Request;
 using ListaDeTarefas.Application.Usuarios.Commands.Login.Request;
 using ListaDeTarefas.Application.Usuarios.Commands.Login.Response;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,20 @@ namespace ListaDeTarefas.API.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
+
+        [HttpPost]
+        [Route("/CriarUsuario")]
+        public async Task<IActionResult> Criar(
+            [FromServices] ICriarUsuarioHandler _handler,
+            [FromBody] CriarUsuarioRequest request)
+        {
+            var response = await _handler.Handle(request);
+            if (response.StatusCode is HttpStatusCode.BadRequest)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
 
         [HttpPost]
         [Route("/Logar")]

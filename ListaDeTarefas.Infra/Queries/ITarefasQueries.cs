@@ -5,9 +5,9 @@ namespace ListaDeTarefas.Infra.Queries
 {
     public interface ITarefasQueries
     {
-        Task<Tarefa> ListarTarefa(int idTarefa);
         Task<Tarefa> ListarTarefaEmAndamento(int idTarefa);
         Task<Tarefa> ListarTarefaFinalizada(int idTarefa);
+        Task<TarefaDTO> ListarTarefa(int idTarefa);
         Task<IEnumerable<TarefaDTO>> ListarTodas();
         Task<IEnumerable<TarefaDTO>> ListarTodasFinalizadas();
         Task<IEnumerable<TarefaDTO>> ListarTodasEmAndamento();

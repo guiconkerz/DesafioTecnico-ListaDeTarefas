@@ -1,15 +1,10 @@
-﻿using ListaDeTarefas.Application.Interfaces.Services;
-using ListaDeTarefas.Application.Interfaces.Usuarios;
-using ListaDeTarefas.Application.Interfaces.Usuarios.Handler;
+﻿using ListaDeTarefas.Application.Interfaces.Usuarios.Handler;
 using ListaDeTarefas.Application.Usuarios.Commands.AlterarSenha.Request;
 using ListaDeTarefas.Application.Usuarios.Commands.AtivarConta.Request;
 using ListaDeTarefas.Application.Usuarios.Commands.Criar.Request;
 using ListaDeTarefas.Application.Usuarios.Commands.Excluir.Request;
-using ListaDeTarefas.Application.Usuarios.Commands.Login.Request;
 using ListaDeTarefas.Application.Usuarios.Commands.SolicitarAlteracaoSenha.Request;
 using ListaDeTarefas.Infra.Queries;
-using ListaDeTarefas.Infra.Services;
-using ListaDeTarefas.Infra.Services.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -20,6 +15,7 @@ namespace ListaDeTarefas.API.Controllers
     [ApiController]
     public class UsuarioController : ControllerBase
     {
+        [Authorize]
         [HttpGet]
         [Route("/ListarTodas/{idUsuario}")]
         public async Task<IActionResult> ListarTodas(
@@ -34,6 +30,7 @@ namespace ListaDeTarefas.API.Controllers
             return Ok(tarefas);
         }
 
+        [Authorize]
         [HttpGet]
         [Route("/TarefasFinalizadas/{idUsuario}")]
         public async Task<IActionResult> ListarTodasFinalizadas(
@@ -48,6 +45,7 @@ namespace ListaDeTarefas.API.Controllers
             return Ok(tarefas);
         }
 
+        [Authorize]
         [HttpGet]
         [Route("/TarefasEmAndamento/{idUsuario}")]
         public async Task<IActionResult> ListarTodasEmAndamento(
@@ -62,21 +60,7 @@ namespace ListaDeTarefas.API.Controllers
             return Ok(tarefas);
         }
 
-
-        [HttpPost]
-        [Route("/CriarUsuario")]
-        public async Task<IActionResult> Criar(
-            [FromServices] ICriarUsuarioHandler _handler,
-            [FromBody] CriarUsuarioRequest request)
-        {
-            var response = await _handler.Handle(request);
-            if (response.StatusCode is HttpStatusCode.BadRequest)
-            {
-                return BadRequest(response);
-            }
-            return Ok(response);
-        }
-
+        [Authorize]
         [HttpPut]
         [Route("/SolicitarCódigoAlteracaoSenha")]
         public async Task<IActionResult> SolicitarCódigoAlteracaoSenha(
@@ -96,6 +80,7 @@ namespace ListaDeTarefas.API.Controllers
             return Ok(response);
         }
 
+        [Authorize]
         [HttpPut]
         [Route("/AlterarSenha")]
         public async Task<IActionResult> AlterarSenha(
@@ -115,6 +100,7 @@ namespace ListaDeTarefas.API.Controllers
             return Ok(response);
         }
 
+        [Authorize]
         [HttpPut]
         [Route("/AtivarConta")]
         public async Task<IActionResult> AtivarConta(
@@ -134,6 +120,7 @@ namespace ListaDeTarefas.API.Controllers
             return Ok(response);
         }
 
+        [Authorize]
         [HttpDelete]
         [Route("/{id}")]
         public async Task<IActionResult> Excluir(

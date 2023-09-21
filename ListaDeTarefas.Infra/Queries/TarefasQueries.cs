@@ -2,6 +2,7 @@
 using ListaDeTarefas.Domain.Models;
 using ListaDeTarefas.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace ListaDeTarefas.Infra.Queries
 {
@@ -14,28 +15,12 @@ namespace ListaDeTarefas.Infra.Queries
             _tarefasContext = tarefasContext;
         }
 
-        public async Task<Tarefa> ListarTarefa(int idTarefa) =>
-            await _tarefasContext
-                  .Tarefas
-                  .AsNoTracking()
-                  .Where(x => x.TarefaId == idTarefa)
-                  .Select(x =>
-                        new Tarefa(x.Titulo,
-                                   x.Descricao,
-                                   x.DataEntrega,
-                                   x.Finalizada))
-                  .FirstOrDefaultAsync();
-
         public async Task<Tarefa> ListarTarefaFinalizada(int idTarefa) =>
             await _tarefasContext
                   .Tarefas
                   .AsNoTracking()
-                  .Where(x => x.TarefaId == idTarefa && x.Finalizada)
-                  .Select(x =>
-                        new Tarefa(x.Titulo,
-                                   x.Descricao,
-                                   x.DataEntrega,
-                                   x.Finalizada))
+                  .Where(x => x.TarefaId == idTarefa && x.Finalizada == true)
+                  .Include(x => x.Usuario)
                   .FirstOrDefaultAsync();
 
         public async Task<Tarefa> ListarTarefaEmAndamento(int idTarefa) =>
@@ -43,11 +28,22 @@ namespace ListaDeTarefas.Infra.Queries
                   .Tarefas
                   .AsNoTracking()
                   .Where(x => x.TarefaId == idTarefa && x.Finalizada == false)
-                  .Select(x => 
-                        new Tarefa(x.Titulo,
-                                   x.Descricao,
-                                   x.DataEntrega,
-                                   x.Finalizada))
+                  .Include(x => x.Usuario)
+                  .FirstOrDefaultAsync();
+
+        public async Task<TarefaDTO> ListarTarefa(int idTarefa) =>
+            await _tarefasContext
+                  .Tarefas
+                  .AsNoTracking()
+                  .Where(x => x.TarefaId == idTarefa)
+                  .Select(t =>
+                        new TarefaDTO(
+                            t.TarefaId,
+                            t.Titulo,
+                            t.Descricao,
+                            t.DataEntrega,
+                            t.Finalizada,
+                            t.Usuario.Login.Username))
                   .FirstOrDefaultAsync();
 
         public async Task<IEnumerable<TarefaDTO>> ListarTodas() =>
@@ -61,7 +57,7 @@ namespace ListaDeTarefas.Infra.Queries
                             t.Descricao,
                             t.DataEntrega,
                             t.Finalizada,
-                            t.FkUsuario))
+                            t.Usuario.Login.Username))
                    .ToListAsync();
 
         public async Task<IEnumerable<TarefaDTO>> ListarTodasFinalizadas() =>
@@ -76,7 +72,7 @@ namespace ListaDeTarefas.Infra.Queries
                             t.Descricao,
                             t.DataEntrega,
                             t.Finalizada,
-                            t.FkUsuario))
+                            t.Usuario.Login.Username))
                   .ToListAsync();
 
         public async Task<IEnumerable<TarefaDTO>> ListarTodasEmAndamento() =>
@@ -91,7 +87,7 @@ namespace ListaDeTarefas.Infra.Queries
                             t.Descricao,
                             t.DataEntrega,
                             t.Finalizada,
-                            t.FkUsuario))
+                            t.Usuario.Login.Username))
                    .ToListAsync();
 
         public async Task<IEnumerable<TarefaDTO>> ListarTodasDoUsuario(int idUsuario) =>
@@ -106,7 +102,7 @@ namespace ListaDeTarefas.Infra.Queries
                             t.Descricao,
                             t.DataEntrega,
                             t.Finalizada,
-                            t.FkUsuario))
+                            t.Usuario.Login.Username))
                   .ToListAsync();
 
         public async Task<IEnumerable<TarefaDTO>> ListarTodasFinalizadas(int idUsuario) =>
@@ -121,7 +117,7 @@ namespace ListaDeTarefas.Infra.Queries
                             t.Descricao,
                             t.DataEntrega,
                             t.Finalizada,
-                            t.FkUsuario))
+                            t.Usuario.Login.Username))
                   .ToListAsync();
 
         public async Task<IEnumerable<TarefaDTO>> ListarTodasEmAndamento(int idUsuario) =>
@@ -136,7 +132,7 @@ namespace ListaDeTarefas.Infra.Queries
                             t.Descricao,
                             t.DataEntrega,
                             t.Finalizada,
-                            t.FkUsuario))
+                            t.Usuario.Login.Username))
                   .ToListAsync();
     }
 }
