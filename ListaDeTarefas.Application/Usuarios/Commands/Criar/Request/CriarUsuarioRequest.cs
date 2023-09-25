@@ -14,9 +14,9 @@ namespace ListaDeTarefas.Application.Usuarios.Commands.Criar.Request
             Perfil = perfil;
         }
 
-        public string Login { get; private set; }
-        public string Senha { get; private set; }
-        public string Email { get; private set; }
+        public string Login { get; set; }
+        public string Senha { get; set; }
+        public string Email { get; set; }
         public string Perfil { get; set; }
 
         public void Validar()

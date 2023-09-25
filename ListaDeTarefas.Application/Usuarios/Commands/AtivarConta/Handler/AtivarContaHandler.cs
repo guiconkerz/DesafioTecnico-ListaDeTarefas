@@ -51,15 +51,18 @@ namespace ListaDeTarefas.Application.Usuarios.Commands.AtivarConta.Handler
                 #endregion
 
                 #region Verifica o código de ativação
-                var retornoCodigoValido = usuarioDB.Email.VerificarEmail.VerificarCodigo(request.CodigoAtivacao);
-                if (!string.IsNullOrEmpty(retornoCodigoValido))
+                var resultado = usuarioDB.Email.VerificarEmail.VerificarCodigo(request.CodigoAtivacao);
+                if (!resultado.CodigoValido || resultado is null)
                 {
                     return new AtivarContaResponse(statusCode: HttpStatusCode.BadRequest,
-                                                    mensagem: retornoCodigoValido);
+                                                    mensagem: resultado.Mensagem);
                 }
                 #endregion
 
                 #region Ativa a conta do Usuário
+
+                usuarioDB.Email.VerificarEmail.AtivarConta();
+
                 _unitOfWork.BeginTransaction();
 
                 var ativado = await _usuarioRepositorio.AtivarConta(usuarioDB);

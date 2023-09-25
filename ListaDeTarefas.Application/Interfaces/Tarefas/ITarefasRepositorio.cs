@@ -10,5 +10,7 @@ namespace ListaDeTarefas.Application.Interfaces.Tarefas
         Task<bool> AlterarStatus(Tarefa tarefa);
         Task<Tarefa> ObterPorIdAsync(int id);
         Task<IEnumerable<Tarefa>> ListarTodas();
+        Task<bool> AlterarDescricao(Tarefa tarefa);
+        Task<bool> AlterarTitulo(Tarefa tarefa);
     }
 }

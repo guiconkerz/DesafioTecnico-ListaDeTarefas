@@ -10,8 +10,6 @@ namespace ListaDeTarefas.Infra.Repositories
     {
         public readonly TarefasDbContext _tarefasContext;
         public readonly IRepositorioBase<Usuario> _repositorioBase;
-        private readonly DateTime? __dataNula = null;
-        private readonly string? __codNulo = null;
 
         public UsuarioRepositorio(TarefasDbContext tarefasContext, IRepositorioBase<Usuario> repositorioBase)
         {
@@ -47,9 +45,9 @@ namespace ListaDeTarefas.Infra.Repositories
                             .Where(x => x.UsuarioId == usuario.UsuarioId)
                             .ExecuteUpdateAsync(x =>
                                 x.SetProperty(x => x.Senha.Password, usuario.Senha.Password)
-                                .SetProperty(x => x.Senha.DataExpiracao, dataNula)
-                                .SetProperty(x => x.Senha.DataVerificacao, DateTime.Now)
-                                .SetProperty(x => x.Senha.CodigoAlteracao, __codNulo));
+                                .SetProperty(x => x.Senha.DataExpiracao, usuario.Senha.DataExpiracao)
+                                .SetProperty(x => x.Senha.DataVerificacao, usuario.Senha.DataVerificacao)
+                                .SetProperty(x => x.Senha.CodigoAlteracao, usuario.Senha.CodigoAlteracao));
 
             if (alterado == 0)
             {
@@ -104,9 +102,9 @@ namespace ListaDeTarefas.Infra.Repositories
                   .Usuarios
                   .Where(x => x.Email.Endereco == usuario.Email.Endereco && x.Email.VerificarEmail.Codigo == usuario.Email.VerificarEmail.Codigo)
                   .ExecuteUpdateAsync(x =>
-                    x.SetProperty(x => x.Email.VerificarEmail.DataExpiracao, __dataNula)
-                     .SetProperty(x => x.Email.VerificarEmail.DataVerificacao, DateTime.Now)
-                     .SetProperty(x => x.Email.VerificarEmail.Codigo, __codNulo));
+                    x.SetProperty(x => x.Email.VerificarEmail.DataExpiracao, usuario.Email.VerificarEmail.DataExpiracao)
+                     .SetProperty(x => x.Email.VerificarEmail.DataVerificacao, usuario.Email.VerificarEmail.DataVerificacao)
+                     .SetProperty(x => x.Email.VerificarEmail.Codigo, usuario.Email.VerificarEmail.Codigo));
 
             if (ativado == 0)
             {

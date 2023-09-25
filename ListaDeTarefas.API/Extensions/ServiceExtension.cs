@@ -5,6 +5,8 @@ using ListaDeTarefas.Application.Interfaces.Tarefas;
 using ListaDeTarefas.Application.Interfaces.UnitOfWork;
 using ListaDeTarefas.Application.Interfaces.Usuarios;
 using ListaDeTarefas.Application.Interfaces.Usuarios.Handler;
+using ListaDeTarefas.Application.Tarefas.Commands.AlterarDescricao.Handler;
+using ListaDeTarefas.Application.Tarefas.Commands.AlterarTitulo.Handler;
 using ListaDeTarefas.Application.Tarefas.Commands.Criar.Handler;
 using ListaDeTarefas.Application.Tarefas.Commands.MarcarEmAndamento.Handler;
 using ListaDeTarefas.Application.Tarefas.Commands.MarcarFinalizada.Handler;
@@ -71,6 +73,8 @@ namespace ListaDeTarefas.API.Extensions
             builder.Services.AddScoped<ICriarTarefaHandler, CriarTarefaHandler>();
             builder.Services.AddScoped<ITarefaEmAndamentoHandler, TarefaEmAndamentoHandler>();
             builder.Services.AddScoped<IFinalizarTarefaHandler, FinalizarTarefaHandler>();
+            builder.Services.AddScoped<IAlterarDescricaoTarefaHandler, AlterarDescricaoTarefaHandler>();
+            builder.Services.AddScoped<IAlterarTituloTarefaHandler, AlterarTituloTarefaHandler>();
 
             builder.Services.AddScoped<ITarefasQueries, TarefasQueries>();
 

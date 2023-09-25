@@ -1,16 +1,18 @@
 ﻿using ListaDeTarefas.Shared.Entities;
+using ListaDeTarefas.Shared.Exceptions;
 
 namespace ListaDeTarefas.Domain.Models
 {
     public sealed class Tarefa : Entity
     {
         protected Tarefa() { }
-        public Tarefa(string titulo, string descricao, DateTime dataEntrega, bool finalizada)
+        public Tarefa(string titulo, string descricao, DateTime dataEntrega, bool finalizada, Usuario usuario)
         {
             Titulo = titulo;
             Descricao = descricao;
             DataEntrega = dataEntrega;
             Finalizada = finalizada;
+            Usuario = usuario;
         }
 
         public int TarefaId { get; private set; }
@@ -47,13 +49,16 @@ namespace ListaDeTarefas.Domain.Models
             return true;
         }
 
-        public void VincularUsuario(Usuario usuario)
+        public void AlterarTitulo(string titulo)
         {
-            if (usuario is null)
-            {
-                AddNotification("Tarefa.Usuario", "Usuario inválido");
-            }
-            Usuario = usuario;
+            DadosInvalidosException.ThrowIfNull(titulo);
+            Titulo = titulo;
+        }
+
+        public void AlterarDescricao(string descricao)
+        {
+            DadosInvalidosException.ThrowIfNull(descricao);
+            Descricao = descricao;
         }
 
     }

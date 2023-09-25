@@ -19,7 +19,7 @@ namespace ListaDeTarefas.Tests.Commands.Excluir
         }
 
         [TestMethod]
-        public void Deve_retornar_erro_ao_informar_usuario_nao_cadastrado()
+        public void Nao_deve_excluir_nenhum_usuario_que_nao_esteja_na_lista()
         {
             var sucesso = 0;
             foreach (var usuario in fakeUsuarios.Usuarios)
@@ -35,7 +35,7 @@ namespace ListaDeTarefas.Tests.Commands.Excluir
         }
 
         [TestMethod]
-        public void Deve_retornar_sucesso_ao_excluir_um_usuario_com_id_15_que_esta_cadastrado()
+        public void Deve_excluir_um_usuario_com_id_15_que_esta_cadastrado()
         {
             var sucesso = 0;
             foreach (var usuario in fakeUsuarios.Usuarios)

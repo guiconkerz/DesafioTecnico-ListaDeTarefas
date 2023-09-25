@@ -1,14 +1,26 @@
-﻿using ListaDeTarefas.Shared.ValueObjects;
+﻿using ListaDeTarefas.Shared.Exceptions;
+using ListaDeTarefas.Shared.Results;
+using ListaDeTarefas.Shared.ValueObjects;
 
 namespace ListaDeTarefas.Domain.ValueObjects
 {
     public class VerificarEmail : ValueObject
     {
-        public VerificarEmail(string codigo)
+        public VerificarEmail() { }
+        public VerificarEmail(string codigo, DateTime dataExpiracao)
         {
             Codigo = codigo;
+            DataExpiracao = dataExpiracao;
         }
-        public VerificarEmail() {}
+
+        public VerificarEmail(string codigo, DateTime? dataExpiracao = null, DateTime? dataVerificacao = null)
+        {
+            Codigo = codigo;
+            DataExpiracao = dataExpiracao;
+            DataVerificacao = dataVerificacao;
+        }
+        
+        
         public string? Codigo { get; private set; }
         public DateTime? DataExpiracao { get; private set; } 
         public DateTime? DataVerificacao { get; private set; } = null;
@@ -21,29 +33,49 @@ namespace ListaDeTarefas.Domain.ValueObjects
             DataVerificacao = null;
         }
 
-        public string VerificarCodigo(string codigo)
+        public VerificacaoCodigoResult VerificarCodigo(string codigo)
         {
+            DadosInvalidosException.ThrowIfNull(codigo, "Código de ativação informado não confere com o que foi enviado. Por favor, verifique.");
+
             if (Codigo is null && DataVerificacao != null)
             {
-                return "Essa conta já foi ativada.";
-            }
-
-            if (string.IsNullOrEmpty(codigo.Trim()) != string.IsNullOrEmpty(Codigo.Trim()))
-            {
-                return "Código de ativação informado não confere com o que foi enviado. Por favor, verifique.";
+                return new VerificacaoCodigoResult
+                {
+                    CodigoValido = false,
+                    Mensagem = "Essa conta já foi ativada."
+                };
             }
 
             if (Ativo)
             {
-                return "Este código já foi utilizado.";
+                return new VerificacaoCodigoResult
+                {
+                    CodigoValido = false,
+                    Mensagem = "Este código já foi utilizado."
+                };
             }
 
             if (DataExpiracao < DateTime.Now || DataExpiracao is null)
             {
-                return "Este código já expirou.";
+                return new VerificacaoCodigoResult
+                {
+                    CodigoValido = false,
+                    Mensagem = "Este código já expirou."
+                };
             }
 
-            return string.Empty;
+            return new VerificacaoCodigoResult
+            {
+                CodigoValido = true,
+                Mensagem = string.Empty
+            };
+        }
+
+        public void AtivarConta()
+        {
+            DataExpiracao = null;
+            Codigo = null;
+            DataVerificacao = DateTime.Now;
         }
 
     }

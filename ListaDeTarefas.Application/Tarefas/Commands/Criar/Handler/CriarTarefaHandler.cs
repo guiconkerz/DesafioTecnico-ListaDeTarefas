@@ -46,9 +46,10 @@ namespace ListaDeTarefas.Application.Tarefas.Commands.Criar.Handler
                 var tarefa = new Tarefa(titulo: request.Titulo,
                                         descricao: request.Descricao,
                                         dataEntrega: request.DataEntrega,
-                                        finalizada: false);
+                                        finalizada: false,
+                                        usuario: usuarioDB);
 
-                tarefa.VincularUsuario(usuarioDB);
+
                 usuarioDB.AdicionarTarefa(tarefa);
 
                 _unitOfWork.BeginTransaction();

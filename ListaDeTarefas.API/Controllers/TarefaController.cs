@@ -1,4 +1,6 @@
 ﻿using ListaDeTarefas.Application.Interfaces.Tarefas;
+using ListaDeTarefas.Application.Tarefas.Commands.AlterarDescricao.Request;
+using ListaDeTarefas.Application.Tarefas.Commands.AlterarTitulo.Request;
 using ListaDeTarefas.Application.Tarefas.Commands.Criar.Request;
 using ListaDeTarefas.Application.Tarefas.Commands.MarcarEmAndamento.Request;
 using ListaDeTarefas.Application.Tarefas.Commands.MarcarFinalizada.Request;
@@ -72,6 +74,34 @@ namespace ListaDeTarefas.API.Controllers
         public async Task<IActionResult> Criar(
             [FromServices] ICriarTarefaHandler _handler,
             [FromBody] CriarTarefaRequest request)
+        {
+            var response = await _handler.Handle(request);
+            if (response.StatusCode is HttpStatusCode.BadRequest)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
+        [HttpPut]
+        [Route("/AlterarTitulo")]
+        public async Task<IActionResult> AlterarTitulo(
+            [FromServices] IAlterarTituloTarefaHandler _handler,
+            [FromBody] AlterarTituloTarefaRequest request)
+        {
+            var response = await _handler.Handle(request);
+            if (response.StatusCode is HttpStatusCode.BadRequest)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
+        [HttpPut]
+        [Route("/AlterarDescricao")]
+        public async Task<IActionResult> AlterarDescricao(
+            [FromServices] IAlterarDescricaoTarefaHandler _handler,
+            [FromBody] AlterarDescricaoTarefaRequest request)
         {
             var response = await _handler.Handle(request);
             if (response.StatusCode is HttpStatusCode.BadRequest)

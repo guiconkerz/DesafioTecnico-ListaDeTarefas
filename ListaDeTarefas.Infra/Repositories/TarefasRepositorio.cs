@@ -68,7 +68,6 @@ namespace ListaDeTarefas.Infra.Repositories
         public async Task<Tarefa> ObterPorIdAsync(int id) =>
             await _tarefasContext
                     .Tarefas
-                    .AsNoTracking()
                     .Where(x => x.TarefaId == id)
                     .FirstOrDefaultAsync();
 
@@ -78,5 +77,35 @@ namespace ListaDeTarefas.Infra.Repositories
             .AsNoTracking()
             .OrderBy(x => x.TarefaId)
             .ToListAsync();
+
+        public async Task<bool> AlterarDescricao(Tarefa tarefa)
+        {
+            var atualizado = await _tarefasContext
+                .Tarefas
+                .Where(x => x.TarefaId == tarefa.TarefaId)
+                .ExecuteUpdateAsync(x =>
+                    x.SetProperty(x => x.Descricao, tarefa.Descricao));
+
+            if (atualizado == 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public async Task<bool> AlterarTitulo(Tarefa tarefa)
+        {
+            var atualizado = await _tarefasContext
+                .Tarefas
+                .Where(x => x.TarefaId == tarefa.TarefaId)
+                .ExecuteUpdateAsync(x =>
+                    x.SetProperty(x => x.Descricao, tarefa.Descricao));
+
+            if (atualizado == 0)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

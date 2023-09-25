@@ -6,28 +6,69 @@ using ListaDeTarefas.Application.Usuarios.Commands.Criar.Handler;
 using ListaDeTarefas.Application.Usuarios.Commands.Criar.Request;
 using ListaDeTarefas.Domain.Models;
 using ListaDeTarefas.Domain.ValueObjects;
+using Moq;
+using System.Net;
 
 namespace ListaDeTarefas.Tests.Commands.Criar
 {
     [TestClass]
     public class CriarUsuarioTest
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IUsuarioRepositorio _usuarioRepositorio;
-        private readonly IPerfilRepositorio _perfilRepositorio;
-        private readonly IEmailServices _emailService;
-        private readonly Usuario _usuario;
-        private readonly Perfil _perfil;
+        private Mock<IUnitOfWork> uowMock;
+        private Mock<IUsuarioRepositorio> usuarioMock;
+        private Mock<IPerfilRepositorio> perfilMock;
+        private Mock<IEmailServices> emailMock;
+        private CriarUsuarioRequest request;
         private readonly Login _login;
         private readonly Senha _senha;
         private readonly Email _email;
 
         public CriarUsuarioTest()
         {
+            uowMock = new Mock<IUnitOfWork>();
+            usuarioMock = new Mock<IUsuarioRepositorio>();
+            perfilMock = new Mock<IPerfilRepositorio>();
+            emailMock = new Mock<IEmailServices>();
+
             _login = new Login("admin");
             _senha = new Senha("@Admin123");
             _email = new Email("email@email.com");
-            _perfil = new Perfil("Administrador");
+
+            request = new CriarUsuarioRequest(login: _login.Username.Trim(),
+                                                  senha: _senha.Password.Trim(),
+                                                  email: _email.Endereco.Trim(),
+                                                  perfil: "Admin");
+
+
+            
+        }
+
+        [TestMethod]
+        [DataRow("")]
+        [DataRow(" ")]
+        [DataRow("  ")]
+        public void RetornarErroAoInformarLoginInvalido(string login)
+        {
+            request.Login = login;
+
+            var response = new CriarUsuarioHandler(uowMock.Object, usuarioMock.Object, emailMock.Object, perfilMock.Object).Handle(request).GetAwaiter().GetResult();
+            Assert.IsTrue(response.Notifications.Count > 0);
+        }
+
+
+        [TestMethod]
+        [DataRow(" usuario")]
+        [DataRow("usuario ")]
+        [DataRow(" usuario ")]
+        [DataRow("usuario")]
+        [DataRow("usuario1")]
+        [DataRow("343423")]
+        public void RetornarSucessoAoInformarLoginValido(string login)
+        {
+            request.Login = login;
+
+            var response = new CriarUsuarioHandler(uowMock.Object, usuarioMock.Object, emailMock.Object, perfilMock.Object).Handle(request).GetAwaiter().GetResult();
+            Assert.IsTrue(response.Notifications.Count == 0);
         }
 
         [TestMethod]
@@ -37,12 +78,11 @@ namespace ListaDeTarefas.Tests.Commands.Criar
         [DataRow("somestring.com")]
         public void RetonarErroAoInformarEmailInvalido(string email)
         {
-            var request = new CriarUsuarioRequest(login: _login.Username.Trim(),
-                                                  senha: _senha.Password.Trim(),
-                                                  email: email.Trim(),
-                                                  perfil: "Adm");
 
-            var response = new CriarUsuarioHandler(_unitOfWork, _usuarioRepositorio, _emailService, _perfilRepositorio).Handle(request).GetAwaiter().GetResult();
+            request.Email = email;
+
+            var response = new CriarUsuarioHandler(uowMock.Object, usuarioMock.Object, emailMock.Object, perfilMock.Object).Handle(request).GetAwaiter().GetResult();
+
             Assert.IsTrue(response.Notifications.Count > 0);
         }
 
@@ -53,46 +93,15 @@ namespace ListaDeTarefas.Tests.Commands.Criar
         [DataRow("some@outlook.com")]
         [DataRow("some@yahoo.com")]
         [DataRow("some@dominio.com.br")]
-        public void RetonarSucessoAoInformarEmailValido(string email)
+        public void RetonarErroAoInformarEmailValidoEJaCadastrado(string email)
         {
-            var request = new CriarUsuarioRequest(login: _login.Username.Trim(),
-                                                  senha: _senha.Password.Trim(),
-                                                  email: email.Trim(),
-                                                   perfil: "Adm");
-            var response = new CriarUsuarioHandler(_unitOfWork, _usuarioRepositorio, _emailService, _perfilRepositorio).Handle(request).GetAwaiter().GetResult();
-            Assert.IsTrue(response.Notifications.Count == 0);
-        }
+            request.Email = email;
 
-        [TestMethod]
-        [DataRow("")]
-        [DataRow(" ")]
-        [DataRow("  ")]
-        public void RetornarErroAoInformarLoginInvalido(string login)
-        {
-            var request = new CriarUsuarioRequest(login: login.Trim(),
-                                                  senha: _senha.Password.Trim(),
-                                                  email: _email.Endereco.Trim(),
-                                                  perfil: "Adm");
-            var response = new CriarUsuarioHandler(_unitOfWork, _usuarioRepositorio, _emailService, _perfilRepositorio).Handle(request).GetAwaiter().GetResult();
-            Assert.IsTrue(response.Notifications.Count > 0);
-        }
+            usuarioMock.Setup(x => x.EmailCadastrado(request.Email)).ReturnsAsync(true);
 
-        [TestMethod]
-        [DataRow(" usuario")]
-        [DataRow("usuario ")]
-        [DataRow(" usuario ")]
-        [DataRow("usuario")]
-        [DataRow("usuario1")]
-        [DataRow("343423")]
-        [DataRow("sdasd232")]
-        public void RetornarSucessoAoInformarLoginValido(string login)
-        {
-            var request = new CriarUsuarioRequest(login: login.Trim(),
-                                                  senha: _senha.Password.Trim(),
-                                                  email: _email.Endereco.Trim(),
-                                                  perfil: "Adm");
-            var response = new CriarUsuarioHandler(_unitOfWork, _usuarioRepositorio, _emailService, _perfilRepositorio).Handle(request).GetAwaiter().GetResult();
-            Assert.IsTrue(response.Notifications.Count == 0);
+            var response = new CriarUsuarioHandler(uowMock.Object, usuarioMock.Object, emailMock.Object, perfilMock.Object).Handle(request).GetAwaiter().GetResult();
+
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [TestMethod]
@@ -123,11 +132,8 @@ namespace ListaDeTarefas.Tests.Commands.Criar
         [DataRow("@@#@#@#@321321321")]
         public void RetornarErroAoInformarSenhaInvalida(string senha)
         {
-            var request = new CriarUsuarioRequest(login: _login.Username.Trim(),
-                                                  senha: senha.Trim(),
-                                                  email: _email.Endereco.Trim(),
-                                                  perfil: "Adm");
-            var response = new CriarUsuarioHandler(_unitOfWork, _usuarioRepositorio, _emailService, _perfilRepositorio).Handle(request).GetAwaiter().GetResult();
+            request.Senha = senha;
+            var response = new CriarUsuarioHandler(uowMock.Object, usuarioMock.Object, emailMock.Object, perfilMock.Object).Handle(request).GetAwaiter().GetResult();
             Assert.IsTrue(response.Notifications.Count > 0);
         }
 
@@ -138,23 +144,50 @@ namespace ListaDeTarefas.Tests.Commands.Criar
         [DataRow("457f45$%ds%Xdsmsd")]
         public void RetornarSucessoAoInformarSenhaValida(string senha)
         {
-            var request = new CriarUsuarioRequest(login: _login.Username.Trim(),
-                                                  senha: senha.Trim(),
-                                                  email: _email.Endereco.Trim(),
-                                                  perfil: "Adm");
-            var response = new CriarUsuarioHandler(_unitOfWork, _usuarioRepositorio, _emailService, _perfilRepositorio).Handle(request).GetAwaiter().GetResult();
+            request.Senha = senha;
+
+            var response = new CriarUsuarioHandler(uowMock.Object, usuarioMock.Object, emailMock.Object, perfilMock.Object).Handle(request).GetAwaiter().GetResult();
             Assert.IsTrue(response.Notifications.Count == 0);
         }
 
         [TestMethod]
+        [DataRow("Administrador")]
+        [DataRow("Padrão")]
+        public void RetonarErroAoInformarPerfilInvalido(string perfil)
+        {
+            request.Perfil = perfil;
+
+            perfilMock.Setup(x => x.ObterPorNomeAsync(request.Perfil)).ReturnsAsync((Perfil)null);
+
+            var response = new CriarUsuarioHandler(uowMock.Object, usuarioMock.Object, emailMock.Object, perfilMock.Object).Handle(request).GetAwaiter().GetResult();
+
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [TestMethod]
+        [DataRow("Administrador")]
+        [DataRow("Padrão")]
+        public void RetonarSucessoAoInformarPerfilValido(string perfil)
+        {
+            request.Perfil = perfil;
+
+            perfilMock.Setup(x => x.ObterPorNomeAsync(request.Perfil)).ReturnsAsync(new Perfil(request.Perfil));
+
+            var response = new CriarUsuarioHandler(uowMock.Object, usuarioMock.Object, emailMock.Object, perfilMock.Object).Handle(request).GetAwaiter().GetResult();
+
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+        }
+
+
+        [TestMethod]
         public void RetornarSucessoAoCriarUsuario()
         {
-            var request = new CriarUsuarioRequest(login: _login.Username.Trim(),
-                                                  senha: _senha.Password.Trim(),
-                                                  email: _email.Endereco.Trim(),
-                                                  perfil: "Adm");
-            var response = new CriarUsuarioHandler(_unitOfWork, _usuarioRepositorio, _emailService, _perfilRepositorio).Handle(request).GetAwaiter().GetResult();
-            Assert.IsTrue(response.Notifications.Count == 0);
+            usuarioMock.Setup(x => x.EmailCadastrado(request.Email)).ReturnsAsync(false);
+            perfilMock.Setup(x => x.ObterPorNomeAsync(request.Perfil)).ReturnsAsync(new Perfil(request.Perfil));
+
+            var response = new CriarUsuarioHandler(uowMock.Object, usuarioMock.Object, emailMock.Object, perfilMock.Object).Handle(request).GetAwaiter().GetResult();
+
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         }
     }
 }

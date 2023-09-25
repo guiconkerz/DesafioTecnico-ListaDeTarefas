@@ -54,15 +54,15 @@ namespace ListaDeTarefas.Tests.Queries.BuscarTarefasPorUsuarioTests
 
             _tarefas = new List<Tarefa>
             {
-                new Tarefa(titulo: "Tarefa 1", descricao: "tenho que fazer a tarefa 1", new DateTime(2023, 09, 09), finalizada: false),
-                new Tarefa(titulo: "Tarefa 2", descricao: "tenho que fazer a tarefa 2", new DateTime(2023, 09, 12), finalizada: false),
-                new Tarefa(titulo: "Tarefa 3", descricao: "tenho que fazer a tarefa 3", new DateTime(2023, 09, 20), finalizada: false),
-                new Tarefa(titulo: "Tarefa 4", descricao: "tenho que fazer a tarefa 4", new DateTime(2023, 09, 15), finalizada: false),
-                new Tarefa(titulo: "Tarefa 5", descricao: "tenho que fazer a tarefa 5", new DateTime(2023, 09, 10), finalizada: true),
-                new Tarefa(titulo: "Tarefa 6", descricao: "tenho que fazer a tarefa 6", new DateTime(2023, 09, 10), finalizada: false),
-                new Tarefa(titulo: "Tarefa 7", descricao: "tenho que fazer a tarefa 7", new DateTime(2023, 09, 14), finalizada: true),
-                new Tarefa(titulo: "Tarefa 8", descricao: "tenho que fazer a tarefa 8", new DateTime(2023, 09, 11), finalizada: true),
-                new Tarefa(titulo: "Tarefa 9", descricao: "tenho que fazer a tarefa 9", new DateTime(2023, 09, 08), finalizada: true),
+                new Tarefa(titulo: "Tarefa 1", descricao: "tenho que fazer a tarefa 1", new DateTime(2023, 09, 09), finalizada: false, usuario: _usuario1),
+                new Tarefa(titulo: "Tarefa 2", descricao: "tenho que fazer a tarefa 2", new DateTime(2023, 09, 12), finalizada: false, usuario: _usuario2),
+                new Tarefa(titulo: "Tarefa 3", descricao: "tenho que fazer a tarefa 3", new DateTime(2023, 09, 20), finalizada: false, usuario: _usuario3),
+                new Tarefa(titulo: "Tarefa 4", descricao: "tenho que fazer a tarefa 4", new DateTime(2023, 09, 15), finalizada: false, usuario: _usuario4),
+                new Tarefa(titulo: "Tarefa 5", descricao: "tenho que fazer a tarefa 5", new DateTime(2023, 09, 10), finalizada: true, usuario: _usuario1),
+                new Tarefa(titulo: "Tarefa 6", descricao: "tenho que fazer a tarefa 6", new DateTime(2023, 09, 10), finalizada: false, usuario: _usuario2),
+                new Tarefa(titulo: "Tarefa 7", descricao: "tenho que fazer a tarefa 7", new DateTime(2023, 09, 14), finalizada: true, usuario: _usuario2),
+                new Tarefa(titulo: "Tarefa 8", descricao: "tenho que fazer a tarefa 8", new DateTime(2023, 09, 11), finalizada: true, usuario: _usuario3),
+                new Tarefa(titulo: "Tarefa 9", descricao: "tenho que fazer a tarefa 9", new DateTime(2023, 09, 08), finalizada: true, usuario: _usuario4),
             };
         }
 
@@ -70,7 +70,7 @@ namespace ListaDeTarefas.Tests.Queries.BuscarTarefasPorUsuarioTests
         public void Deve_Retornar_Tarefas_Apenas_Do_Usuario1()
         {
             var result = _tarefas.AsQueryable().Where(BuscarUsuarioQueries.ObterTodos(_usuario1.Login.Username));
-            Assert.AreEqual(3, result.Count());
+            Assert.AreEqual(2, result.Count());
         }
 
         [TestMethod]
@@ -84,7 +84,7 @@ namespace ListaDeTarefas.Tests.Queries.BuscarTarefasPorUsuarioTests
         public void Deve_Retornar_Apenas_Tarefas_Em_Andamento_Do_Usuario1()
         {
             var result = _tarefas.AsQueryable().Where(BuscarUsuarioQueries.ObterTarefasEmAndamento(_usuario1.Login.Username));
-            Assert.AreEqual(2, result.Count());
+            Assert.AreEqual(1, result.Count());
         }
 
         [TestMethod]
@@ -94,7 +94,7 @@ namespace ListaDeTarefas.Tests.Queries.BuscarTarefasPorUsuarioTests
             var dataFinal = new DateTime(2023, 09, 15);
 
             var result = _tarefas.AsQueryable().Where(BuscarUsuarioQueries.ObterPorPeriodo(_usuario1.Login.Username, dataInicial, dataFinal, false));
-            Assert.AreEqual(2, result.Count());
+            Assert.AreEqual(1, result.Count());
         }
         [TestMethod]
         public void Deve_Retornar_Apenas_Tarefas_Finalizadas_Por_Periodo_Do_Usuario1()
