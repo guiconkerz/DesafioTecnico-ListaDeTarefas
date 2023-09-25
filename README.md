@@ -48,8 +48,13 @@ Construir um sistema de gerenciamento de tarefas simples com autenticação e au
 # Como rodar na minha máquina?
 
   1) Rodar um migration para criar a base
-  2) Criar pelo banco de dados chamado "Administrador" e outro chamado "Padrão"
-  3) Testar a api
+  2) Criar pelo banco de dados chamado "Administrador" e outro chamado "Padrão", utilizando os comandos
+     
+     ```INSERT INTO Perfil (Nome) values ('Administrador');```
+     
+     ```INSERT INTO Perfil (Nome) values ('Padrão');```
+     
+  4) Testar a api
 
 # Sugestões
 
