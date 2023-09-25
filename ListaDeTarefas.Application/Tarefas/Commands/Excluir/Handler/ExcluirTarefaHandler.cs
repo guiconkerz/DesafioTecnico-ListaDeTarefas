@@ -1,48 +1,48 @@
-﻿using ListaDeTarefas.Application.Interfaces.UnitOfWork;
+﻿using ListaDeTarefas.Application.Interfaces.Tarefas;
+using ListaDeTarefas.Application.Interfaces.UnitOfWork;
 using ListaDeTarefas.Application.Interfaces.Usuarios;
-using ListaDeTarefas.Application.Interfaces.Usuarios.Handler;
-using ListaDeTarefas.Application.Usuarios.Commands.Excluir.Request;
+using ListaDeTarefas.Application.Tarefas.Commands.Excluir.Request;
 using ListaDeTarefas.Application.Usuarios.Commands.Excluir.Response;
 using ListaDeTarefas.Shared.Interfaces;
 using System.Net;
 
-namespace ListaDeTarefas.Application.Usuarios.Commands.Excluir.Handler
+namespace ListaDeTarefas.Application.Tarefas.Commands.Excluir.Handler
 {
-    public class ExcluirUsuarioHandler : IExcluirUsuarioHandler
+    public sealed class ExcluirTarefaHandler : IExcluirTarefaHandler
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IUsuarioRepositorio _usuarioRepositorio;
+        private readonly ITarefasRepositorio _tarefaRepositorio;
 
-        public ExcluirUsuarioHandler(IUnitOfWork unitOfWork, IUsuarioRepositorio usuarioRepositorio)
+        public ExcluirTarefaHandler(IUnitOfWork unitOfWork, ITarefasRepositorio tarefaRepositorio)
         {
             _unitOfWork = unitOfWork;
-            _usuarioRepositorio = usuarioRepositorio;
+            _tarefaRepositorio = tarefaRepositorio;
         }
-        
-        public async Task<IResponse> Handle(ExcluirUsuarioRequest request)
+
+        public async Task<IResponse> Handle(ExcluirTarefaRequest request)
         {
             request.Validar();
             if (!request.IsValid)
             {
                 return new ExcluirUsuarioResponse(StatusCode: HttpStatusCode.BadRequest,
-                                                  Mensagem: "Falha na requisição para excluir um usuário.",
+                                                  Mensagem: "Falha na requisição para excluir uma tarefa.",
                                                   Notifications: request.Notifications);
             }
 
             try
             {
                 _unitOfWork.BeginTransaction();
-                var removido = await _usuarioRepositorio.RemoverAsync(request.Id);
+                var removido = await _tarefaRepositorio.RemoverAsync(request.IdTarefa);
                 if (removido == false)
                 {
-                    return new ExcluirUsuarioResponse(StatusCode: HttpStatusCode.BadRequest,
-                                                      Mensagem: $"Nenhum usuário com Id {request.Id} cadastrado.",
+                    return new ExcluirUsuarioResponse(StatusCode: HttpStatusCode.InternalServerError,
+                                                      Mensagem: $"Falha ao excluir tarefa. Por favor, tente novamente mais tarde.",
                                                       Notifications: request.Notifications);
                 }
                 _unitOfWork.Commit();
 
                 return new ExcluirUsuarioResponse(StatusCode: HttpStatusCode.OK,
-                                                  Mensagem: $"Usuario com Id {request.Id} excluído com sucesso.",
+                                                  Mensagem: $"Tarefa excluída com sucesso.",
                                                   Notifications: request.Notifications);
             }
             catch (Exception ex)

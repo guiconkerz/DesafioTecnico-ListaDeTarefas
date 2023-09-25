@@ -2,6 +2,7 @@
 using ListaDeTarefas.Application.Tarefas.Commands.AlterarDescricao.Request;
 using ListaDeTarefas.Application.Tarefas.Commands.AlterarTitulo.Request;
 using ListaDeTarefas.Application.Tarefas.Commands.Criar.Request;
+using ListaDeTarefas.Application.Tarefas.Commands.Excluir.Request;
 using ListaDeTarefas.Application.Tarefas.Commands.MarcarEmAndamento.Request;
 using ListaDeTarefas.Application.Tarefas.Commands.MarcarFinalizada.Request;
 using ListaDeTarefas.Infra.Queries;
@@ -135,6 +136,24 @@ namespace ListaDeTarefas.API.Controllers
             if (response.StatusCode is HttpStatusCode.BadRequest)
             {
                 return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
+        [HttpDelete]
+        [Route("/Excluir")]
+        public async Task<IActionResult> Excluir(
+            [FromServices] IExcluirTarefaHandler _handler,
+            [FromBody] ExcluirTarefaRequest request)
+        {
+            var response = await _handler.Handle(request);
+            if (response.StatusCode is HttpStatusCode.BadRequest)
+            {
+                return BadRequest(response);
+            }
+            if (response.StatusCode is HttpStatusCode.InternalServerError)
+            {
+                return StatusCode(500, response);
             }
             return Ok(response);
         }

@@ -27,7 +27,7 @@ namespace ListaDeTarefas.Application.Tarefas.Commands.AlterarTitulo.Handler
             if (!request.IsValid)
             {
                 return new AlterarTituloTarefaResponse(StatusCode: HttpStatusCode.BadRequest,
-                                                          Mensagem: "Falha na requisição para criar um usuário.",
+                                                          Mensagem: "Falha na requisição para alterar o titulo.",
                                                           Notifications: request.Notifications);
             }
             #endregion

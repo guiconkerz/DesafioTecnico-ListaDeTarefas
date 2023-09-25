@@ -8,6 +8,7 @@ using ListaDeTarefas.Application.Interfaces.Usuarios.Handler;
 using ListaDeTarefas.Application.Tarefas.Commands.AlterarDescricao.Handler;
 using ListaDeTarefas.Application.Tarefas.Commands.AlterarTitulo.Handler;
 using ListaDeTarefas.Application.Tarefas.Commands.Criar.Handler;
+using ListaDeTarefas.Application.Tarefas.Commands.Excluir.Handler;
 using ListaDeTarefas.Application.Tarefas.Commands.MarcarEmAndamento.Handler;
 using ListaDeTarefas.Application.Tarefas.Commands.MarcarFinalizada.Handler;
 using ListaDeTarefas.Application.Usuarios.Commands.AlterarSenha.Handler;
@@ -75,6 +76,7 @@ namespace ListaDeTarefas.API.Extensions
             builder.Services.AddScoped<IFinalizarTarefaHandler, FinalizarTarefaHandler>();
             builder.Services.AddScoped<IAlterarDescricaoTarefaHandler, AlterarDescricaoTarefaHandler>();
             builder.Services.AddScoped<IAlterarTituloTarefaHandler, AlterarTituloTarefaHandler>();
+            builder.Services.AddScoped<IExcluirTarefaHandler, ExcluirTarefaHandler>();
 
             builder.Services.AddScoped<ITarefasQueries, TarefasQueries>();
 

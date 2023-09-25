@@ -14,4 +14,8 @@
     <ProjectReference Include="..\ListaDeTarefas.Domain\ListaDeTarefas.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Tarefas\Commands\Excluir\Response\" />
+  </ItemGroup>
+
 </Project>

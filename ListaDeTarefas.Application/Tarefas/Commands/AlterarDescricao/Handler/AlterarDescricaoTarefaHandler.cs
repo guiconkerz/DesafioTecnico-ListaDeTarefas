@@ -26,7 +26,7 @@ namespace ListaDeTarefas.Application.Tarefas.Commands.AlterarDescricao.Handler
             if (!request.IsValid)
             {
                 return new AlterarDescricaoTarefaResponse(StatusCode: HttpStatusCode.BadRequest,
-                                                          Mensagem: "Falha na requisição para criar um usuário.",
+                                                          Mensagem: "Falha na requisição para alterar a descricao.",
                                                           Notifications: request.Notifications);
             }
             #endregion
