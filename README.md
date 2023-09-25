@@ -45,6 +45,12 @@ Construir um sistema de gerenciamento de tarefas simples com autenticação e au
 - Utilização adequada do banco de dados para armazenar as tarefas;
 - Validações para garantir integridade dos dados
 
+# Como rodar na minha máquina?
+
+  1) Rodar um migration para criar a base
+  2) Criar pelo banco de dados chamado "Administrador" e outro chamado "Padrão"
+  3) Testar a api
+
 # Sugestões
 
 - Estou aberto a receber avaliações e sugestões para melhoria do código. A intenção inicial é aplicar conhecimentos adquiridos ao longo da carreira afim de evoluir a experiência em diversos cenários.
