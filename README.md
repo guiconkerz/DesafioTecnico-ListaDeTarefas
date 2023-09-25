@@ -19,6 +19,7 @@ Construir um sistema de gerenciamento de tarefas simples com autenticação e au
 # O que foi utilizado nesse projeto?
 
 - ASP.NET Core Web API;
+- SQL Server;
 - DDD;
 - CQRS;
 - Entity Framework;
